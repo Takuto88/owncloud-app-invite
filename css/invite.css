@@ -1,0 +1,15 @@
+fieldset.personalblock {
+    padding: 0.5em 1em;
+    margin: 1em;
+    background: none repeat scroll 0% 0% rgb(248, 248, 248);
+    color: rgb(85, 85, 85);
+    text-shadow: 0px 1px 0px rgb(255, 255, 255);
+    border-radius: 0.5em 0.5em 0.5em 0.5em;
+}
+
+form input.ng-invalid.ng-dirty {
+background-color: #FA787E;
+}
+form input.ng-valid.ng-dirty {
+background-color: #78FA89;
+}
