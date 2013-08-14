@@ -38,11 +38,12 @@ class UserController extends Controller {
   /**
    * Checks if the user is exists within ownCloud
    *
+   * @CSRFExemption
    * @Ajax
    */
   public function exists() {
     $user = $this->params('username');
-    $exists = count(\OCP\User::getDisplayNames($user)) > 0;
+    $exists = \OCP\User::userExists($user);
     $result = array(
         'exists' => $exists
       );
