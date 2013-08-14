@@ -37,30 +37,11 @@ class PageController extends Controller {
   }
 
   /**
-   * ATTENTION!!!
-   * The following comments turn off security checks
-   * Please look up their meaning in the documentation!
+   * CSRFExemption is OK for index
    *
    * @CSRFExemption
-   * @IsAdminExemption
-   * @IsSubAdminExemption
    */
   public function index() {
     return $this->render('index');
-  }
-
-
-/**
- * ATTENTION!!!
- * The following comments turn off security checks
- * Please look up their meaning in the documentation!
- *
- * @CSRFExemption
- * @IsAdminExemption
- * @IsSubAdminExemption
- */
-  public function listEntries() {
-    $entries = ['one', 'two', 'three'];
-    return new JSONResponse($entries, 200);
   }
 }

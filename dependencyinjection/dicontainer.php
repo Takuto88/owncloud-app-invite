@@ -25,6 +25,7 @@ namespace OCA\Invite\DependencyInjection;
 use \OCA\AppFramework\DependencyInjection\DIContainer as BaseContainer;
 
 use \OCA\Invite\Controller\PageController;
+use \OCA\Invite\Controller\UserController;
 
 class DIContainer extends BaseContainer {
 
@@ -33,6 +34,10 @@ class DIContainer extends BaseContainer {
 
         $this['PageController'] = $this->share(function($c){
             return new PageController($c['API'], $c['Request']);
+        });
+
+        $this['UserController'] = $this->share(function($c){
+            return new UserController($c['API'], $c['Request']);
         });
     }
 

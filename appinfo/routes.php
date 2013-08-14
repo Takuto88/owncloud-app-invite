@@ -33,9 +33,10 @@ $this->create('invite_index', '/')->get()->action(
     }
 );
 
-$this->create('invite_entries', '/entries')->get()->action(
+
+$this->create('invite_user_exists', '/user/exists/{username}')->get()->action(
     function($params){
         // call the index method on the class PageController
-        App::main('PageController', 'listEntries', $params, new DIContainer());
+        App::main('UserController', 'exists', $params, new DIContainer());
     }
 );
