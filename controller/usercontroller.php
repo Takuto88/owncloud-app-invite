@@ -38,7 +38,6 @@ class UserController extends Controller {
   /**
    * Checks if the user is exists within ownCloud
    *
-   * @CSRFExemption
    * @Ajax
    */
   public function exists() {
