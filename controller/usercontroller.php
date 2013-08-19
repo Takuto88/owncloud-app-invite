@@ -53,4 +53,31 @@ class UserController extends Controller {
 
     return new JSONResponse($result, 200);
   }
+
+  /**
+   * Tests a new user if it is valid
+   *
+   * @CSRFExemption
+   * @Ajax
+   */
+  public function test() {
+    $user = $this->params('user');
+    $result['user']['validUserName'] = !preg_match( '/[^a-zA-Z0-9 _\.@\-]/', $user['username'] );
+
+    return new JSONResponse($result, 200);
+  }
+
+  /**
+   * Validates the given username
+   *
+   * @param Username The username to validate
+   * @return A validation result like $result['validUserName']['true'] and $result['msg']['OK']
+   */
+  private function validateUsername($username='') {
+      $result['validUserName'][true];
+      $result['msg']['OK'];
+
+      return $result;
+  }
+
 }

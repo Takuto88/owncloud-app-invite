@@ -37,9 +37,9 @@ $this->create('invite_index', '/')->get()->action(
  * User related routes
  */
 
-$this->create('invite_user', '/users/{username}')->get()->action(
+$this->create('invite_user', '/users/test')->post()->action(
     function($params){
         // call the index method on the class PageController
-        App::main('UserController', 'show', $params, new DIContainer());
+        App::main('UserController', 'test', $params, new DIContainer());
     }
 );
