@@ -47,7 +47,6 @@ class PageController extends Controller {
     $groups = array();
     if($this->api->isAdminUser($uid)) {
       $groups = \OC_Group::getGroups();
-      var_dump($groups);
     } else {
       $groups = \OC_SubAdmin::getSubAdminsGroups($uid);
     }
