@@ -42,6 +42,17 @@ class PageController extends Controller {
    * @CSRFExemption
    */
   public function index() {
-    return $this->render('index');
+    $uid = $this->api->getUserId();
+
+    $groups = array();
+    if($this->api->isAdminUser($uid)) {
+      $groups = \OC_Group::getGroups();
+      var_dump($groups);
+    } else {
+      $groups = \OC_SubAdmin::getSubAdminsGroups($uid);
+    }
+
+    $model = array('groups' => $groups);
+    return $this->render('index', $model);
   }
 }
