@@ -19,20 +19,21 @@ var OC_Invite = {
         requesttoken: OC_Invite.csrfToken
       },
       success: function(validationResult){
-        var user = validationResult.user;
-        if(user.validUserName) {
+        var usernameValidation = validationResult.usernameValidation;
+        var emailValidation = validationResult.emailValidation;
+        if(usernameValidation.validUsername) {
           $('em#user-invalid').hide();
           $('em#user-valid').show();
         } else {
-          $('em#user-invalid').show().text(validationResult.msg);
+          $('em#user-invalid').show().text(usernameValidation.msg);
           $('em#user-valid').hide();
         }
 
-        if(user.validEmail) {
+        if(emailValidation.validEmail) {
           $('em#email-invalid').hide();
           $('em#email-valid').show();
         } else {
-          $('em#email-invalid').show().text(validationResult.msg);
+          $('em#email-invalid').show().text(emailValidation.msg);
           $('em#email-valid').hide();
         }
       }

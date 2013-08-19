@@ -57,14 +57,19 @@ class UserController extends Controller {
   /**
    * Tests a new user if it is valid
    *
-   * @CSRFExemption
    * @Ajax
    */
   public function test() {
     $user = $this->params('user');
-    $result['user']['validUserName'] = !preg_match( '/[^a-zA-Z0-9 _\.@\-]/', $user['username'] );
+    $usernameValidation = $this->validateUsername($user['username']);
+    $emailValidation = $this->validateEmail($user['email']);
 
-    return new JSONResponse($result, 200);
+    $response = array(
+      'usernameValidation' => $usernameValidation,
+      'emailValidation' => $emailValidation
+      );
+
+    return new JSONResponse($response, 200);
   }
 
   /**
@@ -74,8 +79,40 @@ class UserController extends Controller {
    * @return A validation result like $result['validUserName']['true'] and $result['msg']['OK']
    */
   private function validateUsername($username='') {
-      $result['validUserName'][true];
-      $result['msg']['OK'];
+      $result = array(
+          'validUsername' => true,
+          'msg' => 'OK'
+        );
+
+      if(!isset($username) || empty($username)) {
+        $result['validUsername'] = false;
+        $result['msg'] = 'Username is empty';
+      }
+
+      if(preg_match( '/[^a-zA-Z0-9 _\.@\-]/', $username )) {
+        $result['validUsername'] = false;
+        $result['msg'] = 'Username contains illegal characters';
+      }
+
+      return $result;
+  }
+
+  /**
+   * Validates the given username
+   *
+   * @param Username The username to validate
+   * @return A validation result like $result['validUserName']['true'] and $result['msg']['OK']
+   */
+  private function validateEmail($email='') {
+      $result = array(
+          'validEmail' => true,
+          'msg' => 'OK'
+        );
+
+      if(!isset( $email ) || !filter_var( $email, FILTER_VALIDATE_EMAIL)) {
+        $result['validEmail'] = false;
+        $result['msg'] = 'Invalid mail address';
+      }
 
       return $result;
   }
