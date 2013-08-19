@@ -76,7 +76,7 @@ class UserController extends Controller {
    * Validates the given username
    *
    * @param Username The username to validate
-   * @return A validation result like $result['validUserName']['true'] and $result['msg']['OK']
+   * @return A validation result like $result['validUserName'] => true and $result['msg'] => 'OK'
    */
   private function validateUsername($username='') {
       $result = array(
@@ -98,10 +98,10 @@ class UserController extends Controller {
   }
 
   /**
-   * Validates the given username
+   * Validates the given email address
    *
-   * @param Username The username to validate
-   * @return A validation result like $result['validUserName']['true'] and $result['msg']['OK']
+   * @param email The email to validate
+   * @return A validation result like $result['validEmail'] => true and $result['msg'] => 'OK'
    */
   private function validateEmail($email='') {
       $result = array(
@@ -109,7 +109,7 @@ class UserController extends Controller {
           'msg' => 'OK'
         );
 
-      if(!isset( $email ) || !filter_var( $email, FILTER_VALIDATE_EMAIL)) {
+      if(!empty( $email ) || !filter_var( $email, FILTER_VALIDATE_EMAIL)) {
         $result['validEmail'] = false;
         $result['msg'] = 'Invalid mail address';
       }
