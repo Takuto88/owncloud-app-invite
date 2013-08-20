@@ -1,5 +1,4 @@
 var OC_Invite = {
- csrfToken: $('head').data('requesttoken'),
    /**
    * Sends the given user object to the server
    * for serverside validation and updates the
@@ -15,8 +14,7 @@ var OC_Invite = {
       data: JSON.stringify(user),
       contentType: "application/json",
       headers: {
-        Accept: "application/json",
-        requesttoken: OC_Invite.csrfToken
+        Accept: "application/json"
       },
       success: function(validationResult){
         var usernameValidation = validationResult.usernameValidation;

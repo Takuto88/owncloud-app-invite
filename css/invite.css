@@ -7,9 +7,10 @@ fieldset.personalblock {
     border-radius: 0.5em 0.5em 0.5em 0.5em;
 }
 
-form input.ng-invalid.ng-dirty {
-background-color: #FA787E;
+div.invite-input {
+  display: inline-block;
 }
-form input.ng-valid.ng-dirty {
-background-color: #78FA89;
+
+div.invite-group-header {
+  margin-top: 10px;
 }

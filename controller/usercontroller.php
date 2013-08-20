@@ -36,28 +36,10 @@ class UserController extends Controller {
   }
 
   /**
-   * Checks if the user is exists within ownCloud
-   *
-   * @CSRFExemption
-   * @Ajax
-   */
-  public function show() {
-    $uid = $this->params('username');
-
-    $exists = \OCP\User::userExists($uid);
-    $result = array();
-    $result['user']['username'] = $uid;
-    $result['user']['email'] = \OC_Preferences::getValue($uid, 'settings', 'email', 'none');
-    $result['user']['exists'] = $exists;
-    $result['user']['nameIsValid'] = !preg_match( '/[^a-zA-Z0-9 _\.@\-]/', $uid );
-
-    return new JSONResponse($result, 200);
-  }
-
-  /**
    * Tests a new user if it is valid
    *
    * @Ajax
+   * @IsAdminExemption
    */
   public function test() {
     $user = $this->params('user');

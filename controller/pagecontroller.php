@@ -37,21 +37,32 @@ class PageController extends Controller {
   }
 
   /**
+   * IsAdminExemption is OK, because we want subadmins to access things
    * CSRFExemption is OK for index
    *
+   * @IsAdminExemption
    * @CSRFExemption
    */
   public function index() {
     $uid = $this->api->getUserId();
 
+    $tmpGroups = array();
     $groups = array();
+
+    // Query groups based on user's permissions
     if($this->api->isAdminUser($uid)) {
-      $groups = \OC_Group::getGroups();
+      $tmpGroups = \OC_Group::getGroups();
     } else {
-      $groups = \OC_SubAdmin::getSubAdminsGroups($uid);
+      $tmpGroups = \OC_SubAdmin::getSubAdminsGroups($uid);
+    }
+
+    // Filter out just the gid (=group name)
+    foreach ($tmpGroups as $group) {
+      $groups[] = $group;
     }
 
     $model = array('groups' => $groups);
+
     return $this->render('index', $model);
   }
 }
