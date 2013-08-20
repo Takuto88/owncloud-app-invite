@@ -43,10 +43,3 @@ $this->create('invite_user', '/users/test')->post()->action(
         App::main('UserController', 'test', $params, new DIContainer());
     }
 );
-
-$this->create('invite_groups', '/groups')->get()->action(
-    function($params){
-        // call the index method on the class PageController
-        App::main('UserController', 'groups', $params, new DIContainer());
-    }
-);
