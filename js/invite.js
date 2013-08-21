@@ -37,6 +37,9 @@ var OC_Invite = {
       }
     })
   },
+
+
+
   /**
    * Creates a user from the input form
    */
@@ -44,7 +47,8 @@ var OC_Invite = {
     return {
       user: {
         username: $('input#username').val(),
-        email: $('input#email').val()
+        email: $('input#email').val(),
+        groups: $('select.chosen-select').val()
       }
     }
   },
@@ -57,7 +61,32 @@ var OC_Invite = {
     if (search.length >= 3) {
       OC_Invite.validateServerside(OC_Invite.createUserFromForm())
     }
-  }
+  },
+
+  /**
+   * Sends the invite
+   */
+
+   sendInvite: function(evt){
+    evt.preventDefault();
+    var user = OC_Invite.createUserFromForm();
+    $.ajax({
+      url: 'users',
+      data: user,
+      type: 'post',
+      data: JSON.stringify(user),
+      contentType: "application/json",
+      headers: {
+        Accept: "application/json"
+      },
+      success: function(validationResult){
+        alert('OK');
+      },
+      error: function(error) {
+        alert('Gnah!');
+      }
+    })
+   }
 
 }
 
@@ -68,4 +97,5 @@ $(document).ready(function(){
   $('input#username').on('focusout', OC_Invite.keyEventHandler);
   $('input#email').on('focusout', OC_Invite.keyEventHandler);
   $('select.chosen-select').chosen();
+  $('button#send-invite').click(OC_Invite.sendInvite)
 });

@@ -28,8 +28,13 @@ use \OCA\Invite\DependencyInjection\DIContainer;
 
 $this->create('invite_index', '/')->get()->action(
     function($params){
-        // call the index method on the class PageController
         App::main('PageController', 'index', $params, new DIContainer());
+    }
+);
+
+$this->create('invite_join', '/users')->get()->action(
+    function($params){
+        App::main('PageController', 'join', $params, new DIContainer());
     }
 );
 
@@ -37,9 +42,14 @@ $this->create('invite_index', '/')->get()->action(
  * User related routes
  */
 
-$this->create('invite_user', '/users/test')->post()->action(
+$this->create('invite_test', '/users/test')->post()->action(
     function($params){
-        // call the index method on the class PageController
         App::main('UserController', 'test', $params, new DIContainer());
+    }
+);
+
+$this->create('invite_create', '/users')->post()->action(
+    function($params){
+        App::main('UserController', 'create', $params, new DIContainer());
     }
 );

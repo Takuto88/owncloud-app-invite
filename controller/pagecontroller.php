@@ -48,9 +48,10 @@ class PageController extends Controller {
 
     $tmpGroups = array();
     $groups = array();
+    $isAdmin = $this->api->isAdminUser($uid);
 
     // Query groups based on user's permissions
-    if($this->api->isAdminUser($uid)) {
+    if($isAdmin) {
       $tmpGroups = \OC_Group::getGroups();
     } else {
       $tmpGroups = \OC_SubAdmin::getSubAdminsGroups($uid);
@@ -61,7 +62,7 @@ class PageController extends Controller {
       $groups[] = $group;
     }
 
-    $model = array('groups' => $groups);
+    $model = array('groups' => $groups, 'isAdmin' => $isAdmin);
 
     return $this->render('index', $model);
   }

@@ -55,6 +55,62 @@ class UserController extends Controller {
   }
 
   /**
+   * Creates a new user
+   *
+   * @Ajax
+   * @IsAdminExemption
+   */
+  public function create(){
+    $user = $this->params('user');
+
+    // Don't trust the user's input blindly... Validate things first
+    $usernameValidation = $this->validateUsername($user['username']);
+    $emailValidation = $this->validateEmail($user['email']);
+
+    if(!$usernameValidation['validUsername'] || !$emailValidation['validEmail']) {
+      return new JSONResponse(array('msg' => 'Invalid user or email'), 400);
+    }
+
+    if(!$this->validateGroups($user['groups'], $this->api->isAdminUser($uid))) {
+      return new JSONResponse(array('msg' => 'Invalid groups'), 400);
+    }
+
+    // Set a secure inital password (will not be send to the user)
+    $user['password'] = $this->mkToken();
+
+    // Create the user and add him to groups
+    if (!\OC_User::createUser($user['username'], $user['password'])) {
+      return new JSONResponse(array( 'msg' => 'User creation failed for '.$username ), 500);
+    }
+
+    foreach ($user['groups'] as $group) {
+      \OC_Group::addToGroup( $user['username'], $group );
+    }
+
+    // Set email and password token
+    $token = $this->mkToken();
+    \OC_Preferences::setValue($user['username'], 'settings', 'email', $user['email']);
+    \OC_Preferences::setValue($user['username'], 'invite', 'token', hash('sha256', $token)); // Hash again for timing attack protection
+
+    // Send email
+    $link = \OC_Helper::linkToRoute('invite_join', array('user' => $user['username'], 'token' => $token));
+    $link = \OC_Helper::makeURLAbsolute($link);
+    $tmpl = new \OCP\Template('core/lostpassword', 'email');
+    $tmpl->assign('link', $link, false);
+    $msg = $tmpl->fetchPage();
+    $l = $this->api->getTrans();
+    $from = \OCP\Util::getDefaultEmailAddress('lostpassword-noreply');
+
+    try {
+      \OC_Mail::send($user['email'], $user['username'], $l->t('ownCloud password reset'), $msg, $from, 'ownCloud');
+    } catch (Exception $e) {
+      return new JSONResponse(array('msg' => 'Error sending email!', 'error' => $e), 500);
+    }
+
+    return new JSONResponse(array('msg' => 'OK'), 200);
+  }
+
+  /**
    * Validates the given username
    *
    * @param Username The username to validate
@@ -107,6 +163,38 @@ class UserController extends Controller {
       }
 
       return $result;
+  }
+
+  /**
+   * Checks if the given groups are valid and do exist
+   *
+   * @param groups The group array
+   * @param isAdmin Whether or not the user has admin privileges (true / false)
+   * @return True if everything is ok, otherwise false
+   */
+  private function validateGroups($groups=array(), $isAdmin) {
+      // Admins may invite users without setting a group. Group admins must set at least one!
+      if(!is_array($groups) || (!$isAdmin && count($groups) < 1)) {
+        return false;
+      }
+
+      foreach ($groups as $group) {
+        // For now, we don't create new groups!
+        if(!\OC_Group::groupExists($group)) {
+            return false;
+        }
+      }
+
+      return true;
+  }
+
+  /**
+   * Creates a random token
+   *
+   * @return A random token as done the password reset feature of ownCloud
+   */
+  private function mkToken() {
+    return hash('sha256', \OC_Util::generate_random_bytes(30).\OC_Config::getValue('passwordsalt', ''));
   }
 
 }

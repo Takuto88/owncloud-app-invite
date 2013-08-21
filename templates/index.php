@@ -30,17 +30,28 @@
         </div>
         <div class="invite-group-header">
           <label>
-            <?php p($l->t('The user belongs to these groups:')); ?></label>
+            <?php p($l->t('The new user will belong to these groups:')); ?></label>
         </div>
         <div>
-          <select class="chosen-select" data-placeholder="<?php p($l->t('Select groups')) ?>" style="width:350px;" multiple="" tabindex="3">
-            <?php foreach ($_['groups'] as $group): ?>
-            <option value="<?php p($group) ?>"><?php p($group) ?></option>
-          <?php endforeach; ?>
-          </select>
+          <?php if(count($_['groups']) > 1): ?>
+            <select class="chosen-select" data-placeholder="<?php p($l->t('Select groups')) ?>" style="width:350px;" multiple="" tabindex="3">
+              <?php foreach ($_['groups'] as $group): ?>
+              <option value="<?php p($group) ?>"><?php p($group) ?></option>
+            <?php endforeach; ?>
+            </select><br>
+            <?php if(!$_['isAdmin']): ?>
+              <em><?php p($l->t('Please select at least one group')) ?></em>
+            <?php endif;?>
+          <?php else: ?>
+            <select class="chosen-select" disabled data-placeholder="<?php p($l->t('Select groups')) ?>" style="width:350px;" multiple="" tabindex="3">
+              <?php foreach ($_['groups'] as $group): ?>
+              <option value="<?php p($group) ?>" selected><?php p($group) ?></option>
+            <?php endforeach; ?>
+            </select><br>
+          <?php endif ?>
         </div>
         <div class="invite-input submit-button">
-          <button><?php p($l->t('Invite')) ?></button>
+          <button id="send-invite"><?php p($l->t('Invite')) ?></button>
         </div>
       </fieldset>
     </div>
