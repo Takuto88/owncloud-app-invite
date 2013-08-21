@@ -68,12 +68,22 @@ class UserController extends Controller {
 
       if(!isset($username) || empty($username)) {
         $result['validUsername'] = false;
-        $result['msg'] = 'Username is empty';
+        $result['msg'] = $this->api->getTrans()->t('Username is empty')->text;
       }
 
       if(preg_match( '/[^a-zA-Z0-9 _\.@\-]/', $username )) {
         $result['validUsername'] = false;
-        $result['msg'] = 'Username contains illegal characters';
+        $result['msg'] = $this->api->getTrans()->t('Username contains illegal characters')->text;
+      }
+
+      if(strlen($username) < 3) {
+        $result['validUsername'] = false;
+        $result['msg'] = $this->api->getTrans()->t('Username must be at least 3 characters long')->text;
+      }
+
+      if(\OC_User::userExistsForCreation($username)) {
+        $result['validUsername'] = false;
+        $result['msg'] = $this->api->getTrans()->t('User exists already')->text;
       }
 
       return $result;
