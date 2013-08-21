@@ -103,5 +103,5 @@ $(document).ready(function(){
   $('input#username').on('focusout', OC_Invite.keyEventHandler);
   $('input#email').on('focusout', OC_Invite.keyEventHandler);
   $('select.chosen-select').chosen();
-  $('button#send-invite').click(OC_Invite.sendInvite)
+  $('button#send-invite').click(OC_Invite.sendInvite);
 });
