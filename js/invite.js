@@ -64,9 +64,7 @@ var OC_Invite = {
    keyEventHandler: function(evt){
     var search = this.value;
     var validate = $(this).attr('id');
-    if (search.length >= 3) {
-      OC_Invite.validateServerside(OC_Invite.createUserFromForm(), validate);
-    }
+    OC_Invite.validateServerside(OC_Invite.createUserFromForm(), validate);
   },
 
   /**
