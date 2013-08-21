@@ -176,19 +176,23 @@ class UserController extends Controller {
    * @return True if everything is ok, otherwise false
    */
   private function validateGroups($groups=array(), $isAdmin) {
-      // Admins may invite users without setting a group. Group admins must set at least one!
-      if(!is_array($groups) || (!$isAdmin && count($groups) < 1)) {
+    // Admins may invite users without setting a group.
+    if($isAdmin && (!isset($groups) || count($groups) === 0 )) {
+      return true;
+    }
+
+    if(!is_array($groups) || count($groups) < 1) {
+      return false;
+    }
+
+    foreach ($groups as $group) {
+        // For now, we don't create new groups!
+      if(!\OC_Group::groupExists($group)) {
         return false;
       }
+    }
 
-      foreach ($groups as $group) {
-        // For now, we don't create new groups!
-        if(!\OC_Group::groupExists($group)) {
-            return false;
-        }
-      }
-
-      return true;
+    return true;
   }
 
   /**
