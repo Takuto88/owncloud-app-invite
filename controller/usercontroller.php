@@ -62,6 +62,7 @@ class UserController extends Controller {
    */
   public function create(){
     $user = $this->params('user');
+    $uid = $this->api->getUserId();
 
     // Don't trust the user's input blindly... Validate things first
     $usernameValidation = $this->validateUsername($user['username']);
@@ -95,14 +96,16 @@ class UserController extends Controller {
     // Send email
     $link = \OC_Helper::linkToRoute('invite_join', array('user' => $user['username'], 'token' => $token));
     $link = \OC_Helper::makeURLAbsolute($link);
-    $tmpl = new \OCP\Template('core/lostpassword', 'email');
-    $tmpl->assign('link', $link, false);
+    $tmpl = new \OCP\Template('invite', 'email');
+    $tmpl->assign('link', $link);
+    $tmpl->assign('inviter', $uid);
+    $tmpl->assign('invitee', $user['username']);
     $msg = $tmpl->fetchPage();
     $l = $this->api->getTrans();
     $from = \OCP\Util::getDefaultEmailAddress('lostpassword-noreply');
 
     try {
-      \OC_Mail::send($user['email'], $user['username'], $l->t('ownCloud password reset'), $msg, $from, 'ownCloud');
+      \OC_Mail::send($user['email'], $user['username'], $l->t('ownCloud Invitation'), $msg, $from, 'ownCloud');
     } catch (Exception $e) {
       return new JSONResponse(array('msg' => 'Error sending email!', 'error' => $e), 500);
     }
