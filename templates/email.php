@@ -6,4 +6,4 @@ p($l->t('You can accept this invitation by using the following link:' . "\n\n"))
 
 print_unescaped($_['link'] . "\n\n");
 
-p($l->t('If you received this notification in error or if you do not wish to join, simply ignore this mail.'));
+p($l->t('If you have received this notification in error or if you do not wish to join, simply ignore this mail.'));
