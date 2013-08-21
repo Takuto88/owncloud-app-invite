@@ -101,7 +101,7 @@ class UserController extends Controller {
           'msg' => 'OK'
         );
 
-      if(!empty( $email ) || !filter_var( $email, FILTER_VALIDATE_EMAIL)) {
+      if(empty( $email ) || !filter_var( $email, FILTER_VALIDATE_EMAIL)) {
         $result['validEmail'] = false;
         $result['msg'] = 'Invalid mail address';
       }

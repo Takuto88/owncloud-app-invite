@@ -67,4 +67,5 @@ var OC_Invite = {
 $(document).ready(function(){
   $('input#username').on('focusout', OC_Invite.keyEventHandler);
   $('input#email').on('focusout', OC_Invite.keyEventHandler);
+  $('select.chosen-select').chosen();
 });
