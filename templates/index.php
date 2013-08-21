@@ -24,16 +24,20 @@
           <em id="email-valid" style="display: none;"><?php p($l->t('Email OK')); ?></em>
         </div>
       </div>
+      <?php if(count($_["groups"]) > 1): ?>
       <div class="invite-group-header">
         <label><?php p($l->t('The user belongs to these groups:')); ?></label>
       </div>
       <div>
         <?php foreach($_["groups"] as $group): ?>
         <label class="checkbox inline">
-          <input type="checkbox" name="<?php p($group);?>"/> <?php p($group);?>
+          <input type="checkbox" class="invite-group" value="<?php p($group);?>"/> <?php p($group);?>
         </label>
         <?php endforeach;?>
       </div>
+      <?php else: ?>
+      <input type="hidden" class="invite-group" value="<?php p($_['groups'][0])?>"/>
+      <?php endif ?>
       <button>Invite</button>
     </fieldset>
   </form>
