@@ -6,7 +6,7 @@ var OC_Invite = {
    *
    * @param user: The user to validate
    */
-   validateServerside: function(user) {
+   validateServerside: function(user, validate) {
     $.ajax({
       url: 'users/test',
       data: user,
@@ -19,21 +19,26 @@ var OC_Invite = {
       success: function(validationResult){
         var usernameValidation = validationResult.usernameValidation;
         var emailValidation = validationResult.emailValidation;
-        if(usernameValidation.validUsername) {
-          $('em#user-invalid').hide();
-          $('em#user-valid').show();
-        } else {
-          $('em#user-invalid').show().text(usernameValidation.msg);
-          $('em#user-valid').hide();
+        if(validate == 'username') {
+          if(usernameValidation.validUsername) {
+            $('em#user-invalid').hide();
+            $('em#user-valid').show();
+          } else {
+            $('em#user-invalid').show().text(usernameValidation.msg);
+            $('em#user-valid').hide();
+          }
         }
 
-        if(emailValidation.validEmail) {
-          $('em#email-invalid').hide();
-          $('em#email-valid').show();
-        } else {
-          $('em#email-invalid').show().text(emailValidation.msg);
-          $('em#email-valid').hide();
+        if(validate == 'email') {
+          if(emailValidation.validEmail) {
+            $('em#email-invalid').hide();
+            $('em#email-valid').show();
+          } else {
+            $('em#email-invalid').show().text(emailValidation.msg);
+            $('em#email-valid').hide();
+          }
         }
+
       }
     })
   },
@@ -58,8 +63,9 @@ var OC_Invite = {
    */
    keyEventHandler: function(evt){
     var search = this.value;
+    var validate = $(this).attr('id');
     if (search.length >= 3) {
-      OC_Invite.validateServerside(OC_Invite.createUserFromForm())
+      OC_Invite.validateServerside(OC_Invite.createUserFromForm(), validate);
     }
   },
 
