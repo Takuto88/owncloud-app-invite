@@ -75,7 +75,7 @@ class PageController extends Controller {
    * Displays the signup page after a user has
    * that appears after a user clicks the invite link in his mail
    *
-   * This needs to be publicly accessable without any permissions.
+   * This needs to be publicly accessible without any permissions.
    * @CSRFExemption
    * @IsAdminExemption
    * @IsSubAdminExemption
@@ -92,6 +92,44 @@ class PageController extends Controller {
       'token' => $token,
       'username' => $username,
       );
+
+    return $this->render('join', $model, 'guest');
+  }
+
+  /**
+   * Sets the users password after submitting the signup form.
+   * Provided that the user has a valid token and entered
+   * a secure password of couse...
+   *
+   * This needs to be publicly accessible without any permissions.
+   * @CSRFExemption
+   * @IsAdminExemption
+   * @IsSubAdminExemption
+   * @IsLoggedInExemption
+   */
+  public function submit() {
+    $username = $this->params('username');
+    $password = $this->params('password');
+    $token = $this->params('token');
+    $passwordRepeat = $this->params('password-repeat');
+    $validPassword = $this->inviteService->validatePassword($password);
+    $validTokenAndUser = $this->inviteService->validateToken($username, $token);
+    $passwordMissmatch = $passwordRepeat === $password;
+
+    $model = array(
+      'validPassword' => $validPassword,
+      'validTokenAndUser' => $validTokenAndUser,
+      'passwordMissmatch' => $passwordMissmatch,
+      'success' => false,
+      'username' => $username,
+      'token' => $token,
+      );
+
+    if($validPassword && $validTokenAndUser) {
+      \OC_User::setPassword($username, $password);
+      \OC_Preferences::deleteKey($username, 'invite', 'token');
+      $model['success'] = true;
+    }
 
     return $this->render('join', $model, 'guest');
   }

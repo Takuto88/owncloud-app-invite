@@ -1,18 +1,31 @@
 <?php \OCP\Util::addStyle('invite', 'invite');?>
 <?php $defaults = new OC_Defaults() ?>
-<form action="<?php p(OC_Helper::linkToRoute('invite_join_submit')) ?>" method="post">
-    <?php if (isset($_['invalidpassword']) && ($_['invalidpassword'])): ?>
-    <ul>
-      <li class="errors">
-          <?php p($l->t('Passwords do not match!')); ?>
-      </li>
-    </ul>
-    <?php endif; ?>
+<form action="<?php print_unescaped(OC_Helper::linkToRoute('invite_join_submit')) ?>" method="post">
+    <?php if((isset($_['validPassword']) && !$_['validPassword'])): ?>
+        <ul>
+          <li class="error">
+              <span style="font-weight: bold;"><?php p($l->t('Please check your password!')); ?></span>
+              <p>
+                <small><br/><?php p($l->t('A strong password must be provided.')) ?></small><br/>
+                <small><?php p('- ' . $l->t('Make sure the password is at least 6 characters long')) ?></small>
+                <small><br/><?php p('- ' . $l->t('It must contain one upper and one lowercase letter')) ?></small>
+                <small><br/><?php p('- ' . $l->t('It must contain at least one letter or special character')) ?></small>
+              </p>
+          </li>
+        </ul>
+      <?php elseif(isset($_['passwordMissmatch']) && $_['passwordMissmatch']): ?>
+        <ul>
+          <li class="error">
+              <span style="font-weight: bold;"><?php p($l->t('The passwords did not match.')); ?></span>
+          </li>
+        </ul>
+      <?php endif ?>
   <fieldset>
     <?php if($_['validTokenAndUser']): ?>
       <p>
         <label for="username" class="join-label"><?php p($l->t('Username') . ":"); ?></label>
-        <input type="text" name="username" value="<?php p($_['username']); ?>" disabled required />
+        <input type="text" value="<?php p($_['username']); ?>" disabled />
+        <input type="hidden" name="username" value="<?php p($_['username']) ?>"/>
       </p>
       <p>
         <label for="password" class="join-label"><?php p($l->t('Choose a password') .":"); ?></label>
@@ -23,12 +36,22 @@
         <label for="password-repeat" class="join-label"><?php p($l->t('Confirm your password') .":"); ?></label>
         <input type="password" name="password-repeat" value="" required/>
       </p>
+      <input type="hidden" name="token" value="<?php p($_['token']) ?>"/>
       <p style="text-align: center;">
         <input style="margin-top: 10px;" type="submit" id="submit" value="<?php p($l->t('Join %s', array($defaults->getName()))) ?>" />
       </p>
+    <?php elseif(isset($_['success']) &&  $_['success']): ?>
+      <ul>
+        <li class="success">
+            <span style="font-weight: bold;"><?php p($l->t('Success! Welcome to %s', array($defaults->getName())) . ", " . $_['username']); ?></span>
+            <p>
+              <small><br/><a href="<?php print_unescaped(OC_Helper::linkTo('', 'index.php')) ?>"><?php p($l->t('Please click here to log in')) ?></a></small>
+            </p>
+        </li>
+      </ul>
     <?php else: ?>
       <ul>
-        <li class="errors">
+        <li class="error">
             <span style="font-weight: bold;"><?php p($l->t('Your invite link has expired!')); ?></span>
             <p>
               <small><br/><?php p($l->t('Please contact the person who has invited you and ask for a new one.')) ?></small>

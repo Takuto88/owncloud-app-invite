@@ -143,6 +143,27 @@ class InviteService {
   }
 
   /**
+   * Validates the given password.
+   *
+   * At the moment, ownCloud does _NOT_ enforce secure
+   * passwords. Anything but an empty password is valid.
+   * Despite ownCloud's default behavior, you bet that
+   * we WILL enforce secure passwords. At least to some
+   * degree.
+   *
+   * The following will be considered a valid password:
+   * - At least 6 characters in length
+   * - Contain at least one upper and one lower case letter
+   * - Contain at least one special character or number
+   *
+   * @param password The password to validate
+   * @return True if the password is valid, otherwise false
+   */
+  public function validatePassword($password) {
+    return isset($password) && preg_match("/(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/", $password);
+  }
+
+  /**
    * Chreates the user, adds him to his groups and send him an invite mail.
    *
    * This function does double check it's input to make sure that

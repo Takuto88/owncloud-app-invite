@@ -18,3 +18,11 @@ div.invite-group-header {
 label.join-label {
   margin-left: 10px;
 }
+
+#login form .success {
+  background:#66FF00;
+  border:1px solid #009900;
+  list-style-indent:inside;
+  margin:0 0 2em;
+  padding:1em;
+}

@@ -40,7 +40,7 @@ $this->create('invite_join', '/users/join')->get()->action(
 
 $this->create('invite_join_submit', '/users/join')->post()->action(
     function($params){
-        App::main('PageController', 'join', $params, new DIContainer());
+        App::main('PageController', 'submit', $params, new DIContainer());
     }
 );
 
