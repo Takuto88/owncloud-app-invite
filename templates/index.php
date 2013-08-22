@@ -3,12 +3,13 @@
 \OCP\Util::addScript('3rdparty', 'chosen/chosen.jquery.min');
 \OCP\Util::addStyle('invite', 'invite');
 \OCP\Util::addStyle('3rdparty', 'chosen/chosen');
+$defaults = new OC_Defaults();
 ?>
 <div id="app" >
   <form method="POST" action="#" name="inviteForm">
     <div>
       <fieldset class="personalblock">
-        <legend> <strong><?php p($l->t('Invite people to ownCloud')); ?></strong>
+        <legend> <strong><?php p($l->t('Invite people to %s', array($defaults->getName()))); ?></strong>
         </legend>
         <div class="invite-input">
           <label for="username">
@@ -51,7 +52,7 @@
           <?php endif ?>
         </div>
         <div class="invite-input submit-button">
-          <button id="send-invite"><?php p($l->t('Invite')) ?></button>
+          <button id="send-invite"><?php p($l->t('Send invite')) ?></button>
         </div>
       </fieldset>
     </div>
