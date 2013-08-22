@@ -34,6 +34,12 @@ $this->create('invite_index', '/')->get()->action(
 
 $this->create('invite_join', '/users/join')->get()->action(
     function($params){
+        App::main('PageController', 'signup', $params, new DIContainer());
+    }
+);
+
+$this->create('invite_join_submit', '/users/join')->post()->action(
+    function($params){
         App::main('PageController', 'join', $params, new DIContainer());
     }
 );

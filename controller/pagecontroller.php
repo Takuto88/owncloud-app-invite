@@ -69,7 +69,7 @@ class PageController extends Controller {
   }
 
   /**
-   * Displays the join page after a user has
+   * Displays the signup page after a user has
    * that appears after a user clicks the invite link in his mail
    *
    * This needs to be publicly accessable without any permissions.
@@ -79,7 +79,7 @@ class PageController extends Controller {
    * @IsLoggedInExemption
    *
    */
-  public function join() {
+  public function signup() {
     $username = $this->params('user');
     $token = $this->params('token');
     $validTokenAndUser = $this->validateToken($username, $token);
