@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ownCloud invite 5.0.0\n"
 "Report-Msgid-Bugs-To: translations@owncloud.org\n"
-"POT-Creation-Date: 2013-08-22 23:49+0200\n"
+"POT-Creation-Date: 2013-08-23 00:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,23 +29,27 @@ msgstr ""
 msgid "Send invite"
 msgstr ""
 
-#: lib/inviteservice.php:77
+#: lib/inviteservice.php:79
 msgid "Username is empty"
 msgstr ""
 
-#: lib/inviteservice.php:82
+#: lib/inviteservice.php:84
 msgid "Username contains illegal characters"
 msgstr ""
 
-#: lib/inviteservice.php:87
+#: lib/inviteservice.php:89
 msgid "Username must be at least 3 characters long"
 msgstr ""
 
-#: lib/inviteservice.php:92
+#: lib/inviteservice.php:94
 msgid "User exists already"
 msgstr ""
 
-#: lib/inviteservice.php:229
+#: lib/inviteservice.php:114
+msgid "Invalid mail address"
+msgstr ""
+
+#: lib/inviteservice.php:230
 #, php-format
 msgid "You are invited to join %s"
 msgstr ""
@@ -138,7 +142,7 @@ msgid "It must contain one upper and one lowercase letter"
 msgstr ""
 
 #: templates/join.php:12
-msgid "It must contain at least one letter or special character"
+msgid "It must contain at least one digit or special character"
 msgstr ""
 
 #: templates/join.php:18
