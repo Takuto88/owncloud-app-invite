@@ -2,7 +2,9 @@
 <info>
     <id>invite</id>
     <name>Invitations</name>
-    <description>Invite people to your ownCloud</description>
+    <description>
+      Invite new people to ownCloud. Any administrator or group administrator can to invite new people to ownCloud by email if you enable this app.
+    </description>
     <version>1.0</version>
     <licence>AGPL</licence>
     <author>Lennart Rosam</author>
