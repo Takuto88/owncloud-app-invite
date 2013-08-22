@@ -125,7 +125,7 @@ class PageController extends Controller {
       'token' => $token,
       );
 
-    if($validPassword && $validTokenAndUser) {
+    if($validPassword && $validTokenAndUser && !$passwordMissmatch) {
       \OC_User::setPassword($username, $password);
       \OC_Preferences::deleteKey($username, 'invite', 'token');
       $model['success'] = true;
