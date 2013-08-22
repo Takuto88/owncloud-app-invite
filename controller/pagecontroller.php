@@ -28,12 +28,15 @@ use \OCA\AppFramework\Http;
 
 class PageController extends Controller {
 
+  private $inviteService;
+
  /**
   * @param Request $request an instance of the request
   * @param API $api an api wrapper instance
   */
-  public function __construct($api, $request) {
+  public function __construct($api, $request, $inviteService) {
     parent::__construct($api, $request);
+    $this->inviteService = $inviteService;
   }
 
   /**
@@ -82,7 +85,7 @@ class PageController extends Controller {
   public function signup() {
     $username = $this->params('user');
     $token = $this->params('token');
-    $validTokenAndUser = $this->validateToken($username, $token);
+    $validTokenAndUser = $this->inviteService->validateToken($username, $token);
 
     $model = array(
       'validTokenAndUser' => $validTokenAndUser,
@@ -91,17 +94,6 @@ class PageController extends Controller {
       );
 
     return $this->render('join', $model, 'guest');
-  }
-
-  /**
-   * Checks if the given token is valid for the given user
-   *
-   * @param uid The user id
-   * @param token The token
-   * @return True if the token is valid, otherwise false
-   */
-  private function validateToken($uid, $token) {
-     return \OC_Preferences::getValue($uid, 'invite', 'token') === hash('sha256', $token);
   }
 
 }

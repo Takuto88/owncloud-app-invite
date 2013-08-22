@@ -26,18 +26,23 @@ use \OCA\AppFramework\DependencyInjection\DIContainer as BaseContainer;
 
 use \OCA\Invite\Controller\PageController;
 use \OCA\Invite\Controller\UserController;
+use \OCA\Invite\Lib\InviteService;
 
 class DIContainer extends BaseContainer {
 
     public function __construct(){
         parent::__construct('invite');
 
+        $this['InviteService'] = $this->share(function($c){
+          return new InviteService($c['API']);
+        });
+
         $this['PageController'] = $this->share(function($c){
-            return new PageController($c['API'], $c['Request']);
+            return new PageController($c['API'], $c['Request'], $c['InviteService']);
         });
 
         $this['UserController'] = $this->share(function($c){
-            return new UserController($c['API'], $c['Request']);
+            return new UserController($c['API'], $c['Request'], $c['InviteService']);
         });
     }
 

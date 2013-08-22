@@ -1,7 +1,7 @@
 <?php
 p($l->t('Hello %s,', array($_['invitee'])) . "\n\n");
 
-p($l->t('%s has invited you to join ownCloud.' . " ", array($_['inviter'])));
+p($l->t('%s has invited you to join %s.' . " ", array($_['inviter'], $_['productname'])));
 p($l->t('You can accept this invitation by using the following link:' . "\n\n"));
 
 print_unescaped($_['link'] . "\n\n");
