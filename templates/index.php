@@ -25,7 +25,7 @@ $defaults = new OC_Defaults();
             <input id="email" type="email" name="email" original-title="" required/>
             <div>
               <em id="email-invalid">
-                <?php p($l->t('Please enter a valid  email address')); ?></em>
+                <?php p($l->t('Please enter a valid email address')); ?></em>
               <em id="email-valid" style="display: none;">
                 <?php p($l->t('Email OK')); ?></em>
             </div>

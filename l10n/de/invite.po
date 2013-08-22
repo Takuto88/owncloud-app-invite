@@ -93,7 +93,7 @@ msgid "E-Mail"
 msgstr "E-Mail"
 
 #: templates/index.php:28
-msgid "Please enter a valid  email address"
+msgid "Please enter a valid email address"
 msgstr "Gib eine E-Mail Adresse ein"
 
 #: templates/index.php:30
@@ -150,7 +150,7 @@ msgstr "Dein Link ist abgelaufen!"
 
 #: templates/join.php:25
 msgid "Please contact the person who has invited you and ask for a new one."
-msgstr "Bitte kontaktiere die person, die dich eingeladen hat, und frag nach einem neuen Link."
+msgstr "Bitte kontaktiere die Person, die dich eingeladen hat und frag nach einem neuen Link."
 
 #: templates/join.php:38
 msgid "Choose a password"
