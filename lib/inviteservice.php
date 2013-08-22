@@ -195,8 +195,10 @@ class InviteService {
       return new JSONResponse(array( 'msg' => 'User creation failed for '.$username ), 500);
     }
 
-    foreach ($user['groups'] as $group) {
-      \OC_Group::addToGroup( $user['username'], $group );
+    if(isset($user['groups']) && is_array($user['groups'])) {
+      foreach ($user['groups'] as $group) {
+        \OC_Group::addToGroup( $user['username'], $group );
+      }
     }
 
     // Set email and password token
