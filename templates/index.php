@@ -34,7 +34,7 @@ $defaults = new OC_Defaults();
             <?php p($l->t('The new user will belong to these groups:')); ?></label>
         </div>
         <div>
-          <?php if(count($_['groups']) > 1): ?>
+          <?php if(count($_['groups']) > 1 || $_['isAdmin']): ?>
             <select class="chosen-select" data-placeholder="<?php p($l->t('Select groups')) ?>" style="width:350px;" multiple="" tabindex="3">
               <?php foreach ($_['groups'] as $group): ?>
               <option value="<?php p($group) ?>"><?php p($group) ?></option>
