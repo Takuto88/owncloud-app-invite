@@ -1,0 +1,9 @@
+[main]
+host = https://www.transifex.net
+
+[owncloud.invite]
+file_filter = <lang>/invite.po
+source_file = templates/invite.pot
+source_lang = en
+type = PO
+

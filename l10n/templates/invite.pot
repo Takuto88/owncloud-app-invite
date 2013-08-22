@@ -1,0 +1,176 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: ownCloud invite 5.0.0\n"
+"Report-Msgid-Bugs-To: translations@owncloud.org\n"
+"POT-Creation-Date: 2013-08-22 23:49+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: appinfo/app.php:51
+msgid "Invitations"
+msgstr ""
+
+#: js/invite.js:121
+msgid "Sending invite..."
+msgstr ""
+
+#: js/invite.js:154 templates/index.php:56
+msgid "Send invite"
+msgstr ""
+
+#: lib/inviteservice.php:77
+msgid "Username is empty"
+msgstr ""
+
+#: lib/inviteservice.php:82
+msgid "Username contains illegal characters"
+msgstr ""
+
+#: lib/inviteservice.php:87
+msgid "Username must be at least 3 characters long"
+msgstr ""
+
+#: lib/inviteservice.php:92
+msgid "User exists already"
+msgstr ""
+
+#: lib/inviteservice.php:229
+#, php-format
+msgid "You are invited to join %s"
+msgstr ""
+
+#: templates/email.php:2
+#, php-format
+msgid "Hello %s,"
+msgstr ""
+
+#: templates/email.php:4
+#, php-format
+msgid "%s has invited you to join %s. "
+msgstr ""
+
+#: templates/email.php:5
+msgid ""
+"You can accept this invitation by using the following link:\n"
+"\n"
+msgstr ""
+
+#: templates/email.php:9
+msgid ""
+"If you have received this notification in error or if you do not wish to "
+"join, simply ignore this mail."
+msgstr ""
+
+#: templates/index.php:13
+#, php-format
+msgid "Invite people to %s"
+msgstr ""
+
+#: templates/index.php:17 templates/join.php:33
+msgid "Username"
+msgstr ""
+
+#: templates/index.php:19
+msgid "Please enter a valid username"
+msgstr ""
+
+#: templates/index.php:19
+msgid "Username OK"
+msgstr ""
+
+#: templates/index.php:24
+msgid "E-Mail"
+msgstr ""
+
+#: templates/index.php:28
+msgid "Please enter a valid  email address"
+msgstr ""
+
+#: templates/index.php:30
+msgid "Email OK"
+msgstr ""
+
+#: templates/index.php:35
+msgid "The new user will belong to these groups:"
+msgstr ""
+
+#: templates/index.php:39 templates/index.php:48
+msgid "Select groups"
+msgstr ""
+
+#: templates/index.php:45
+msgid "Please select at least one group"
+msgstr ""
+
+#: templates/index.php:60
+msgid "Invitation has been send!"
+msgstr ""
+
+#: templates/index.php:61
+msgid "Invite more people"
+msgstr ""
+
+#: templates/join.php:7
+msgid "Please choose a strong password!"
+msgstr ""
+
+#: templates/join.php:9
+msgid "A strong password must be provided."
+msgstr ""
+
+#: templates/join.php:10
+msgid "Make sure the password is at least 6 characters long"
+msgstr ""
+
+#: templates/join.php:11
+msgid "It must contain one upper and one lowercase letter"
+msgstr ""
+
+#: templates/join.php:12
+msgid "It must contain at least one letter or special character"
+msgstr ""
+
+#: templates/join.php:18
+msgid "The passwords did not match."
+msgstr ""
+
+#: templates/join.php:23
+msgid "Your invite link has expired!"
+msgstr ""
+
+#: templates/join.php:25
+msgid "Please contact the person who has invited you and ask for a new one."
+msgstr ""
+
+#: templates/join.php:38
+msgid "Choose a password"
+msgstr ""
+
+#: templates/join.php:43
+msgid "Confirm your password"
+msgstr ""
+
+#: templates/join.php:48
+#, php-format
+msgid "Join %s"
+msgstr ""
+
+#: templates/join.php:53
+#, php-format
+msgid "Success! Welcome to %s"
+msgstr ""
+
+#: templates/join.php:55
+msgid "Please click here to log in"
+msgstr ""
