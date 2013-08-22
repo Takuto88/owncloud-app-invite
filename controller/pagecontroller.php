@@ -114,7 +114,7 @@ class PageController extends Controller {
     $passwordRepeat = $this->params('password-repeat');
     $validPassword = $this->inviteService->validatePassword($password);
     $validTokenAndUser = $this->inviteService->validateToken($username, $token);
-    $passwordMissmatch = $passwordRepeat === $password;
+    $passwordMissmatch = $passwordRepeat !== $password;
 
     $model = array(
       'validPassword' => $validPassword,
