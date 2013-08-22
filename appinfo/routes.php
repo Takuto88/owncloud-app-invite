@@ -32,7 +32,7 @@ $this->create('invite_index', '/')->get()->action(
     }
 );
 
-$this->create('invite_join', '/users')->get()->action(
+$this->create('invite_join', '/users/join')->get()->action(
     function($params){
         App::main('PageController', 'join', $params, new DIContainer());
     }

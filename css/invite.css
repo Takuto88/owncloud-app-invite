@@ -14,3 +14,7 @@ div.invite-input {
 div.invite-group-header {
   margin-top: 10px;
 }
+
+label.join-label {
+  margin-left: 10px;
+}

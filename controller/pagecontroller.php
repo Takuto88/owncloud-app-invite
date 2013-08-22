@@ -37,6 +37,7 @@ class PageController extends Controller {
   }
 
   /**
+   * Displays the index page of the ownCloud Invitations App
    * IsAdminExemption is OK, because we want subadmins to access things
    * CSRFExemption is OK for index
    *
@@ -66,4 +67,41 @@ class PageController extends Controller {
 
     return $this->render('index', $model);
   }
+
+  /**
+   * Displays the join page after a user has
+   * that appears after a user clicks the invite link in his mail
+   *
+   * This needs to be publicly accessable without any permissions.
+   * @CSRFExemption
+   * @IsAdminExemption
+   * @IsSubAdminExemption
+   * @IsLoggedInExemption
+   *
+   */
+  public function join() {
+    $username = $this->params('user');
+    $token = $this->params('token');
+    $validTokenAndUser = $this->validateToken($username, $token);
+
+    $model = array(
+      'validTokenAndUser' => $validTokenAndUser,
+      'token' => $token,
+      'username' => $username,
+      );
+
+    return $this->render('join', $model, 'guest');
+  }
+
+  /**
+   * Checks if the given token is valid for the given user
+   *
+   * @param uid The user id
+   * @param token The token
+   * @return True if the token is valid, otherwise false
+   */
+  private function validateToken($uid, $token) {
+     return \OC_Preferences::getValue($uid, 'invite', 'token') === hash('sha256', $token);
+  }
+
 }
