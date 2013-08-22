@@ -5,7 +5,7 @@
     <description>
       Invite new people to ownCloud. Any administrator or group administrator can to invite new people to ownCloud by email if you enable this app. Make sure to enable the App Framework _before_ enabling this app!
     </description>
-    <version>1.0</version>
+    <version>1.0 BETA</version>
     <licence>AGPL</licence>
     <author>Lennart Rosam</author>
     <require>5</require>
