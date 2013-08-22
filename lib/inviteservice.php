@@ -179,12 +179,15 @@ class InviteService {
     $emailValidation = $this->validateEmail($user['email']);
     $uid = $this->api->getUserId();
 
-    if(!$usernameValidation['validUsername'] || !$emailValidation['validEmail']) {
-      return new JSONResponse(array('msg' => 'Invalid user or email'), 400);
-    }
+    // Response model for invalid data
+    $invalidDataResponse = array(
+      'validUser' => $usernameValidation['validUsername'],
+      'validEmail' => $emailValidation['validEmail'],
+      'validGroups' => $this->validateGroups($user['groups'], $this->api->isAdminUser($uid))
+      );
 
-    if(!$this->validateGroups($user['groups'], $this->api->isAdminUser($uid))) {
-      return new JSONResponse(array('msg' => 'Invalid groups'), 400);
+    if(!$usernameValidation['validUsername'] || !$emailValidation['validEmail'] || !$invalidDataResponse['validGroups']) {
+      return new JSONResponse($invalidDataResponse, 400);
     }
 
     // Set a secure inital password (will not be send to the user)
@@ -192,7 +195,7 @@ class InviteService {
 
     // Create the user and add him to groups
     if (!\OC_User::createUser($user['username'], $user['password'])) {
-      return new JSONResponse(array( 'msg' => 'User creation failed for '.$username ), 500);
+      return new JSONResponse(array( 'msg' => 'User creation failed for '. $username . '. Please contact your system administrator!'), 500);
     }
 
     if(isset($user['groups']) && is_array($user['groups'])) {
@@ -225,7 +228,7 @@ class InviteService {
     try {
       \OC_Mail::send($user['email'], $user['username'], $l->t('You are invited to join %s', array($this->defaults->getName())), $msg, $from, $uid);
     } catch (Exception $e) {
-      return new JSONResponse(array('msg' => 'Error sending email!', 'error' => $e), 500);
+      return new JSONResponse(array('msg' => 'Error sending email! Please contact your system administrator!', 'error' => $e), 500);
     }
 
     return new JSONResponse(array('msg' => 'OK'), 200);

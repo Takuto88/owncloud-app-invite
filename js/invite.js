@@ -16,6 +16,8 @@ var OC_Invite = {
       headers: {
         Accept: "application/json"
       },
+
+
       success: function(validationResult){
         var usernameValidation = validationResult.usernameValidation;
         var emailValidation = validationResult.emailValidation;
@@ -23,9 +25,11 @@ var OC_Invite = {
           if(usernameValidation.validUsername) {
             $('em#user-invalid').hide();
             $('em#user-valid').show();
+            $('input#username').removeClass('error');
           } else {
             $('em#user-invalid').show().text(usernameValidation.msg);
             $('em#user-valid').hide();
+            $('input#username').addClass('error');
           }
         }
 
@@ -33,17 +37,21 @@ var OC_Invite = {
           if(emailValidation.validEmail) {
             $('em#email-invalid').hide();
             $('em#email-valid').show();
+            $('input#email').removeClass('error');
           } else {
             $('em#email-invalid').show().text(emailValidation.msg);
             $('em#email-valid').hide();
+            $('input#email').addClass('error');
           }
         }
+      },
 
+      error: function(error) {
+        alert('Check your connection, reload the page and try again!');
+        $('button#send-invite').attr('disabled', 'disabled');
       }
-    })
+    });
   },
-
-
 
   /**
    * Creates a user from the input form
@@ -59,12 +67,21 @@ var OC_Invite = {
   },
 
   /**
-   * Handles keypresses on the input elements
+   * Handles the focusout event on the input elements
    */
-   keyEventHandler: function(evt){
+   inputFocusOutHandler: function(evt){
     var search = this.value;
     var validate = $(this).attr('id');
     OC_Invite.validateServerside(OC_Invite.createUserFromForm(), validate);
+  },
+
+  selectChanged: function(evt){
+    var groups = $(this).val();
+    if(groups != null || $(this).data('admin') === 1) {
+      $('.chzn-container').removeClass('error');
+    } else {
+      $('.chzn-container').addClass('error');
+    }
   },
 
   /**
@@ -73,6 +90,15 @@ var OC_Invite = {
 
    sendInvite: function(evt){
     evt.preventDefault();
+
+    // Prevent double clicking
+    if($(this).is(':disabled')) {
+      return;
+    }
+
+    $(this).attr('disabled', 'disabled');
+    $(this).text(t('invite', 'Sending invite...'));
+
     var user = OC_Invite.createUserFromForm();
     $.ajax({
       url: 'users',
@@ -84,12 +110,46 @@ var OC_Invite = {
         Accept: "application/json"
       },
       success: function(validationResult){
-        alert('OK');
+        $('div#invite-form-content').fadeOut('fast', function() {
+          $('div#invite-success').fadeIn('fast');
+        });
       },
       error: function(error) {
-        alert('Gnah!');
+        var httpStatusCode = error.status;
+        error = $.parseJSON(error.responseText);
+
+        if(httpStatusCode === 400) {
+          if(!error.validUser) {
+            $('input#username').addClass('error');
+          }
+
+          if(!error.validEmail){
+            $('input#email').addClass('error');
+          }
+
+          if(!error.validGroups) {
+            $('div.chzn-container').addClass('error');
+          }
+          $('button#send-invite').text(t('invite', 'Send invite'));
+          $('button#send-invite').removeAttr('disabled');
+        }
+
+        // Something went seriously wrong - do not continue!
+        if(httpStatusCode === 500) {
+          alert(error.msg);
+          $('button#send-invite').text(error.msg);
+        }
       }
     })
+   },
+
+   /**
+    * Invites more people to ownCloud
+    */
+   inviteMore: function(evt) {
+      evt.preventDefault();
+      var url = OC.Router.generate('invite_index');
+      window.location = url;
    }
 
 }
@@ -98,8 +158,10 @@ var OC_Invite = {
 
 // Listen for form updates
 $(document).ready(function(){
-  $('input#username').on('focusout', OC_Invite.keyEventHandler);
-  $('input#email').on('focusout', OC_Invite.keyEventHandler);
+  $('input#username').on('focusout', OC_Invite.inputFocusOutHandler);
+  $('input#email').on('focusout', OC_Invite.inputFocusOutHandler);
   $('select.chosen-select').chosen();
   $('button#send-invite').click(OC_Invite.sendInvite);
+  $('button#invite-more').click(OC_Invite.inviteMore);
+  $('select.chosen-select').change(OC_Invite.selectChanged);
 });
