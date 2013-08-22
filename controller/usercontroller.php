@@ -67,9 +67,4 @@ class UserController extends Controller {
     $user = $this->params('user');
     return $this->inviteService->invite($user);
   }
-
-
-
-
-
 }
