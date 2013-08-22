@@ -34,10 +34,12 @@ use \OCA\AppFramework\Http\JSONResponse;
 class InviteService {
   private $defaults;
   private $api;
+  private $l;
 
   public function __construct($api){
     $this->defaults = new OC_Defaults();
     $this->api = $api;
+    $this->l = $api->getTrans();
   }
 
   /**
@@ -74,22 +76,22 @@ class InviteService {
 
       if(!isset($username) || empty($username)) {
         $result['validUsername'] = false;
-        $result['msg'] = $this->api->getTrans()->t('Username is empty')->text;
+        $result['msg'] = $this->l->t('Username is empty');
       }
 
       if(preg_match( '/[^a-zA-Z0-9 _\.@\-]/', $username )) {
         $result['validUsername'] = false;
-        $result['msg'] = $this->api->getTrans()->t('Username contains illegal characters')->text;
+        $result['msg'] = $this->l->t('Username contains illegal characters');
       }
 
       if(strlen($username) < 3) {
         $result['validUsername'] = false;
-        $result['msg'] = $this->api->getTrans()->t('Username must be at least 3 characters long')->text;
+        $result['msg'] = $this->l->t('Username must be at least 3 characters long');
       }
 
       if(\OC_User::userExistsForCreation($username)) {
         $result['validUsername'] = false;
-        $result['msg'] = $this->api->getTrans()->t('User exists already')->text;
+        $result['msg'] = $this->l->t('User exists already');
       }
 
       return $result;
@@ -109,7 +111,7 @@ class InviteService {
 
       if(empty( $email ) || !filter_var( $email, FILTER_VALIDATE_EMAIL)) {
         $result['validEmail'] = false;
-        $result['msg'] = 'Invalid mail address';
+        $result['msg'] = $this->l->t('Invalid mail address');
       }
 
       return $result;
@@ -218,7 +220,6 @@ class InviteService {
     $tmpl->assign('invitee', $user['username']);
     $tmpl->assign('productname', $this->defaults->getName());
     $msg = $tmpl->fetchPage();
-    $l = $this->api->getTrans();
     $from = \OC_Preferences::getValue($this->api->getUserId(), 'settings', 'email');
 
     if(!isset($from)) {
@@ -226,7 +227,7 @@ class InviteService {
     }
 
     try {
-      \OC_Mail::send($user['email'], $user['username'], $l->t('You are invited to join %s', array($this->defaults->getName())), $msg, $from, $uid);
+      \OC_Mail::send($user['email'], $user['username'], $this->l->t('You are invited to join %s', array($this->defaults->getName())), $msg, $from, $uid);
     } catch (Exception $e) {
       return new JSONResponse(array('msg' => 'Error sending email! Please contact your system administrator!', 'error' => $e), 500);
     }

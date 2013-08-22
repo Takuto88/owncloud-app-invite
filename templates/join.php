@@ -9,7 +9,7 @@
                 <small><br/><?php p($l->t('A strong password must be provided.')) ?></small><br/>
                 <small><?php p('- ' . $l->t('Make sure the password is at least 6 characters long')) ?></small>
                 <small><br/><?php p('- ' . $l->t('It must contain one upper and one lowercase letter')) ?></small>
-                <small><br/><?php p('- ' . $l->t('It must contain at least one letter or special character')) ?></small>
+                <small><br/><?php p('- ' . $l->t('It must contain at least one digit or special character')) ?></small>
               </p>
           </li>
           <?php endif; ?>

@@ -48,7 +48,7 @@ var OC_Invite = {
             $('em#user-valid').show();
             $('input#username').removeClass('error');
           } else {
-            $('em#user-invalid').show().text(usernameValidation.msg);
+            $('em#user-invalid').show().text(t('invite', usernameValidation.msg.text));
             $('em#user-valid').hide();
             $('input#username').addClass('error');
           }
@@ -60,7 +60,7 @@ var OC_Invite = {
             $('em#email-valid').show();
             $('input#email').removeClass('error');
           } else {
-            $('em#email-invalid').show().text(emailValidation.msg);
+            $('em#email-invalid').show().text(t('invite', emailValidation.msg.text));
             $('em#email-valid').hide();
             $('input#email').addClass('error');
           }
