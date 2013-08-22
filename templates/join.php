@@ -4,7 +4,7 @@
         <ul>
           <?php if((isset($_['validPassword']) && !$_['validPassword'])): ?>
           <li class="errors">
-              <span style="font-weight: bold;"><?php p($l->t('Please check your password!')); ?></span>
+              <span style="font-weight: bold;"><?php p($l->t('Please choose a strong password!')); ?></span>
               <p>
                 <small><br/><?php p($l->t('A strong password must be provided.')) ?></small><br/>
                 <small><?php p('- ' . $l->t('Make sure the password is at least 6 characters long')) ?></small>
