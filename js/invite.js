@@ -18,7 +18,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
- 
+
 var OC_Invite = {
    /**
    * Sends the given user object to the server
@@ -157,7 +157,11 @@ var OC_Invite = {
 
         // Something went seriously wrong - do not continue!
         if(httpStatusCode === 500) {
-          alert(error.msg);
+          if(error && error.msg) {
+            alert(error.msg);
+          } else {
+            alert(t('Something went very wrong. Please contact your administrator!'));
+          }
           $('button#send-invite').text(error.msg);
         }
       }
