@@ -49,6 +49,11 @@ msgstr "Benutzer existiert bereits"
 msgid "Invalid mail address"
 msgstr "Ungültige E-Mail Adresse"
 
+#: lib/inviteservice.php:230
+#, php-format
+msgid "You are invited to join %s"
+msgstr "Du bist eingeladen %s beizutreten"
+
 #: templates/email.php:2
 #, php-format
 msgid "Hello %s,"

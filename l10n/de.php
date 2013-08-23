@@ -7,6 +7,7 @@
 "Username must be at least 3 characters long" => "Benutzername muss mindestens 3 Zeichen lang sein",
 "User exists already" => "Benutzer existiert bereits",
 "Invalid mail address" => "Ungültige E-Mail Adresse",
+"You are invited to join %s" => "Du bist eingeladen %s beizutreten",
 "Hello %s," => "Hallo %s,",
 "%s has invited you to join %s. " => "%s hat dich eingeladen zur %s beizutreten. ",
 "You can accept this invitation by using the following link:\n\n" => "Du kannst diese Einladung unter folgendem Link annehmen:\n\n",
