@@ -29,6 +29,10 @@ msgstr "Sende Einladung..."
 msgid "Send invite"
 msgstr "Einladung senden"
 
+#: js/invite.js:163
+msgid "Something went very wrong. Please contact your administrator!"
+msgstr "Etwas ist schief gegangen. Bitte kontaktiere deinen Administrator!"
+
 #: lib/inviteservice.php:79
 msgid "Username is empty"
 msgstr "Benutzername ist leer"

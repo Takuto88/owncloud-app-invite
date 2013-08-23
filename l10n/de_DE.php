@@ -2,6 +2,7 @@
 "Invitations" => "Einladungen",
 "Sending invite..." => "Sende Einladung...",
 "Send invite" => "Einladung senden",
+"Something went very wrong. Please contact your administrator!" => "Etwas ist schief gegangen. Bitte kontaktieren Sie Ihren Administrator!",
 "Username is empty" => "Benutzername ist leer",
 "Username contains illegal characters" => "Benutzername enthält ungültige Zeichen",
 "Username must be at least 3 characters long" => "Benutzername muss mindestens 3 Zeichen lang sein",
