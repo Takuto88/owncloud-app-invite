@@ -26,6 +26,7 @@ DRAGONS AHEAD!
 **THIS APP IS STILL EXPERIMENTAL**. It works - for me. It may or may not work for you. Bugreports are always welcome of course.
 
 Before reporting bugs please make sure you have done the following:
+
 * get the newest version of the App Framework
 * get the newest version of the Invitations app
 * `check if they have already been reported <https://github.com/Takuto88/owncloud-app-invite/issues?state=open>`_
