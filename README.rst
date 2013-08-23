@@ -4,6 +4,7 @@ README
 The Invitations app allows you to invite people by mail to your ownCloud instance. 
 
 After installing, a new app will be avaliable to both administrators and group administrators called 'Invitations'.
+
 * It asks for a username that will be used for the users login
 * It asks for a email address. This will be used to send the invitation. Also, it will setup this email inside the users 'Personal' settings so they can recover their password at any time.
 * One can assign groups. This is optional for administrators. Group administrators must assign at least one of the groups that they administer.
