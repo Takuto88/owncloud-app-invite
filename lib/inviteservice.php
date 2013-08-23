@@ -223,7 +223,7 @@ class InviteService {
     $from = \OC_Preferences::getValue($this->api->getUserId(), 'settings', 'email');
 
     if(!isset($from)) {
-      $from = OCP\Util::getDefaultEmailAddress('invite-noreply');
+      $from = \OCP\Util::getDefaultEmailAddress('invite-noreply');
     }
 
     try {
