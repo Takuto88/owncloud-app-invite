@@ -37,7 +37,7 @@ Before you install the Invitations app
 Before you install the app check that the following requirements are met:
 
 * ownCloud Server 5.0.10 or greater is installed (might work with lower versions down to 5.0.0, untested though)
-* App Framework 0.102 or greater
+* App Framework 0.102 or greater - Lower versions will not work correctly!
 
 Installation
 ------------
