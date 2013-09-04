@@ -28,110 +28,110 @@ use \OCA\AppFramework\Http;
 
 class PageController extends Controller {
 
-  private $inviteService;
+	private $inviteService;
 
- /**
-  * @param Request $request an instance of the request
-  * @param API $api an api wrapper instance
-  */
-  public function __construct($api, $request, $inviteService) {
-    parent::__construct($api, $request);
-    $this->inviteService = $inviteService;
-  }
+	/**
+	 * @param Request $request an instance of the request
+	 * @param API $api an api wrapper instance
+	 */
+	public function __construct($api, $request, $inviteService) {
+		parent::__construct($api, $request);
+		$this->inviteService = $inviteService;
+	}
 
-  /**
-   * Displays the index page of the ownCloud Invitations App
-   * IsAdminExemption is OK, because we want subadmins to access things
-   * CSRFExemption is OK for index
-   *
-   * @IsAdminExemption
-   * @CSRFExemption
-   */
-  public function index() {
-    $uid = $this->api->getUserId();
+	/**
+	 * Displays the index page of the ownCloud Invitations App
+	 * IsAdminExemption is OK, because we want subadmins to access things
+	 * CSRFExemption is OK for index
+	 *
+	 * @IsAdminExemption
+	 * @CSRFExemption
+	 */
+	public function index() {
+		$uid = $this->api->getUserId();
 
-    $tmpGroups = array();
-    $groups = array();
-    $isAdmin = $this->api->isAdminUser($uid);
+		$tmpGroups = array();
+		$groups = array();
+		$isAdmin = $this->api->isAdminUser($uid);
 
-    // Query groups based on user's permissions
-    if($isAdmin) {
-      $tmpGroups = \OC_Group::getGroups();
-    } else {
-      $tmpGroups = \OC_SubAdmin::getSubAdminsGroups($uid);
-    }
+		// Query groups based on user's permissions
+		if($isAdmin) {
+			$tmpGroups = \OC_Group::getGroups();
+		} else {
+			$tmpGroups = \OC_SubAdmin::getSubAdminsGroups($uid);
+		}
 
-    // Filter out just the gid (=group name)
-    foreach ($tmpGroups as $group) {
-      $groups[] = $group;
-    }
+		// Filter out just the gid (=group name)
+		foreach ($tmpGroups as $group) {
+			$groups[] = $group;
+		}
 
-    $model = array('groups' => $groups, 'isAdmin' => $isAdmin);
+		$model = array('groups' => $groups, 'isAdmin' => $isAdmin);
 
-    return $this->render('index', $model);
-  }
+		return $this->render('index', $model);
+	}
 
-  /**
-   * Displays the signup page after a user has
-   * that appears after a user clicks the invite link in his mail
-   *
-   * This needs to be publicly accessible without any permissions.
-   * @CSRFExemption
-   * @IsAdminExemption
-   * @IsSubAdminExemption
-   * @IsLoggedInExemption
-   *
-   */
-  public function signup() {
-    $username = $this->params('user');
-    $token = $this->params('token');
-    $validTokenAndUser = $this->inviteService->validateToken($username, $token);
+	/**
+	 * Displays the signup page after a user has
+	 * that appears after a user clicks the invite link in his mail
+	 *
+	 * This needs to be publicly accessible without any permissions.
+	 * @CSRFExemption
+	 * @IsAdminExemption
+	 * @IsSubAdminExemption
+	 * @IsLoggedInExemption
+	 *
+	 */
+	public function signup() {
+		$username = $this->params('user');
+		$token = $this->params('token');
+		$validTokenAndUser = $this->inviteService->validateToken($username, $token);
 
-    $model = array(
-      'validTokenAndUser' => $validTokenAndUser,
-      'token' => $token,
-      'username' => $username,
-      );
+		$model = array(
+			'validTokenAndUser' => $validTokenAndUser,
+			'token' => $token,
+			'username' => $username,
+			);
 
-    return $this->render('join', $model, 'guest');
-  }
+		return $this->render('join', $model, 'guest');
+	}
 
-  /**
-   * Sets the users password after submitting the signup form.
-   * Provided that the user has a valid token and entered
-   * a secure password of couse...
-   *
-   * This needs to be publicly accessible without any permissions.
-   * @CSRFExemption
-   * @IsAdminExemption
-   * @IsSubAdminExemption
-   * @IsLoggedInExemption
-   */
-  public function submit() {
-    $username = $this->params('username');
-    $password = $this->params('password');
-    $token = $this->params('token');
-    $passwordRepeat = $this->params('password-repeat');
-    $validPassword = $this->inviteService->validatePassword($password);
-    $validTokenAndUser = $this->inviteService->validateToken($username, $token);
-    $passwordMissmatch = $passwordRepeat !== $password;
+	/**
+	 * Sets the users password after submitting the signup form.
+	 * Provided that the user has a valid token and entered
+	 * a secure password of couse...
+	 *
+	 * This needs to be publicly accessible without any permissions.
+	 * @CSRFExemption
+	 * @IsAdminExemption
+	 * @IsSubAdminExemption
+	 * @IsLoggedInExemption
+	 */
+	public function submit() {
+		$username = $this->params('username');
+		$password = $this->params('password');
+		$token = $this->params('token');
+		$passwordRepeat = $this->params('password-repeat');
+		$validPassword = $this->inviteService->validatePassword($password);
+		$validTokenAndUser = $this->inviteService->validateToken($username, $token);
+		$passwordMissmatch = $passwordRepeat !== $password;
 
-    $model = array(
-      'validPassword' => $validPassword,
-      'validTokenAndUser' => $validTokenAndUser,
-      'passwordMissmatch' => $passwordMissmatch,
-      'success' => false,
-      'username' => $username,
-      'token' => $token,
-      );
+		$model = array(
+			'validPassword' => $validPassword,
+			'validTokenAndUser' => $validTokenAndUser,
+			'passwordMissmatch' => $passwordMissmatch,
+			'success' => false,
+			'username' => $username,
+			'token' => $token,
+			);
 
-    if($validPassword && $validTokenAndUser && !$passwordMissmatch) {
-      \OC_User::setPassword($username, $password);
-      \OC_Preferences::deleteKey($username, 'invite', 'token');
-      $model['success'] = true;
-    }
+		if($validPassword && $validTokenAndUser && !$passwordMissmatch) {
+			\OC_User::setPassword($username, $password);
+			\OC_Preferences::deleteKey($username, 'invite', 'token');
+			$model['success'] = true;
+		}
 
-    return $this->render('join', $model, 'guest');
-  }
+		return $this->render('join', $model, 'guest');
+	}
 
 }

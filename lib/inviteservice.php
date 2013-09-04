@@ -32,207 +32,208 @@ use \OCA\AppFramework\Http\JSONResponse;
  * of course: adding the user to ownCloud.
  */
 class InviteService {
-  private $defaults;
-  private $api;
-  private $l;
+	private $defaults;
+	private $api;
+	private $l;
 
-  public function __construct($api){
-    $this->defaults = new OC_Defaults();
-    $this->api = $api;
-    $this->l = $api->getTrans();
-  }
+	public function __construct($api){
+		$this->defaults = new OC_Defaults();
+		$this->api = $api;
+		$this->l = $api->getTrans();
+	}
 
-  /**
-   * Creates a random token
-   *
-   * @return A random token as done the password reset feature of ownCloud
-   */
-  private function mkToken() {
-    return hash('sha256', \OC_Util::generate_random_bytes(30).\OC_Config::getValue('passwordsalt', ''));
-  }
+	/**
+	 * Creates a random token
+	 *
+	 * @return A random token as done the password reset feature of ownCloud
+	 */
+	private function mkToken() {
+		return hash('sha256', \OC_Util::generate_random_bytes(30).\OC_Config::getValue('passwordsalt', ''));
+	}
 
-  /**
-   * Checks if the given token is valid for the given user
-   *
-   * @param uid The user id
-   * @param token The token
-   * @return True if the token is valid, otherwise false
-   */
-  public function validateToken($uid, $token) {
-     return \OC_Preferences::getValue($uid, 'invite', 'token') === hash('sha256', $token);
-  }
+	/**
+	 * Checks if the given token is valid for the given user
+	 *
+	 * @param uid The user id
+	 * @param token The token
+	 * @return True if the token is valid, otherwise false
+	 */
+	public function validateToken($uid, $token) {
+		return \OC_Preferences::getValue($uid, 'invite', 'token') === hash('sha256', $token);
+	}
 
-  /**
-   * Validates the given username
-   *
-   * @param Username The username to validate
-   * @return A validation result like $result['validUserName'] => true and $result['msg'] => 'OK'
-   */
-  public function validateUsername($username='') {
-      $result = array(
-          'validUsername' => true,
-          'msg' => 'OK'
-        );
+	/**
+	 * Validates the given username
+	 *
+	 * @param Username The username to validate
+	 * @return A validation result like $result['validUserName'] => true and $result['msg'] => 'OK'
+	 */
+	public function validateUsername($username='') {
 
-      if(!isset($username) || empty($username)) {
-        $result['validUsername'] = false;
-        $result['msg'] = $this->l->t('Username is empty');
-      }
+		$result = array(
+			'validUsername' => true,
+			'msg' => 'OK'
+			);
 
-      if(preg_match( '/[^a-zA-Z0-9 _\.@\-]/', $username )) {
-        $result['validUsername'] = false;
-        $result['msg'] = $this->l->t('Username contains illegal characters');
-      }
+		if(!isset($username) || empty($username)) {
+			$result['validUsername'] = false;
+			$result['msg'] = $this->l->t('Username is empty');
+		}
 
-      if(strlen($username) < 3) {
-        $result['validUsername'] = false;
-        $result['msg'] = $this->l->t('Username must be at least 3 characters long');
-      }
+		if(preg_match( '/[^a-zA-Z0-9 _\.@\-]/', $username )) {
+			$result['validUsername'] = false;
+			$result['msg'] = $this->l->t('Username contains illegal characters');
+		}
 
-      if(\OC_User::userExistsForCreation($username)) {
-        $result['validUsername'] = false;
-        $result['msg'] = $this->l->t('User exists already');
-      }
+		if(strlen($username) < 3) {
+			$result['validUsername'] = false;
+			$result['msg'] = $this->l->t('Username must be at least 3 characters long');
+		}
 
-      return $result;
-  }
+		if(\OC_User::userExistsForCreation($username)) {
+			$result['validUsername'] = false;
+			$result['msg'] = $this->l->t('User exists already');
+		}
 
-  /**
-   * Validates the given email address
-   *
-   * @param email The email to validate
-   * @return A validation result like $result['validEmail'] => true and $result['msg'] => 'OK'
-   */
-  public function validateEmail($email='') {
-      $result = array(
-          'validEmail' => true,
-          'msg' => 'OK'
-        );
+		return $result;
+	}
 
-      if(empty( $email ) || !filter_var( $email, FILTER_VALIDATE_EMAIL)) {
-        $result['validEmail'] = false;
-        $result['msg'] = $this->l->t('Invalid mail address');
-      }
+	/**
+	 * Validates the given email address
+	 *
+	 * @param email The email to validate
+	 * @return A validation result like $result['validEmail'] => true and $result['msg'] => 'OK'
+	 */
+	public function validateEmail($email='') {
+		$result = array(
+			'validEmail' => true,
+			'msg' => 'OK'
+			);
 
-      return $result;
-  }
+		if(empty( $email ) || !filter_var( $email, FILTER_VALIDATE_EMAIL)) {
+			$result['validEmail'] = false;
+			$result['msg'] = $this->l->t('Invalid mail address');
+		}
 
-  /**
-   * Checks if the given groups are valid and do exist
-   *
-   * @param groups The group array
-   * @param isAdmin Whether or not the user has admin privileges (true / false)
-   * @return True if everything is ok, otherwise false
-   */
-  public function validateGroups($groups=array(), $isAdmin) {
-    // Admins may invite users without setting a group.
-    if($isAdmin && (!isset($groups) || count($groups) === 0 )) {
-      return true;
-    }
+		return $result;
+	}
 
-    if(!is_array($groups) || count($groups) < 1) {
-      return false;
-    }
+	/**
+	 * Checks if the given groups are valid and do exist
+	 *
+	 * @param groups The group array
+	 * @param isAdmin Whether or not the user has admin privileges (true / false)
+	 * @return True if everything is ok, otherwise false
+	 */
+	public function validateGroups($groups=array(), $isAdmin) {
+		// Admins may invite users without setting a group.
+		if($isAdmin && (!isset($groups) || count($groups) === 0 )) {
+			return true;
+		}
 
-    foreach ($groups as $group) {
-        // For now, we don't create new groups!
-      if(!\OC_Group::groupExists($group)) {
-        return false;
-      }
-    }
+		if(!is_array($groups) || count($groups) < 1) {
+			return false;
+		}
 
-    return true;
-  }
+		foreach ($groups as $group) {
+				// For now, we don't create new groups!
+			if(!\OC_Group::groupExists($group)) {
+				return false;
+			}
+		}
 
-  /**
-   * Validates the given password.
-   *
-   * At the moment, ownCloud does _NOT_ enforce secure
-   * passwords. Anything but an empty password is valid.
-   * Despite ownCloud's default behavior, you bet that
-   * we WILL enforce secure passwords. At least to some
-   * degree.
-   *
-   * The following will be considered a valid password:
-   * - At least 6 characters in length
-   * - Contain at least one upper and one lower case letter
-   * - Contain at least one special character or number
-   *
-   * @param password The password to validate
-   * @return True if the password is valid, otherwise false
-   */
-  public function validatePassword($password) {
-    return isset($password) && preg_match("/(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/", $password);
-  }
+		return true;
+	}
 
-  /**
-   * Chreates the user, adds him to his groups and send him an invite mail.
-   *
-   * This function does double check it's input to make sure that
-   * everything is in order before actually creating anything.
-   *
-   * @param user The user array containing the keys 'username', 'email', and groups.
-   *             Groups may be empty if the current user is an administrator
-   * @return The appropriate JSONResponse reporting success or error
-   */
-  public function invite($user=array()) {
-    // Don't trust the user's input blindly... Validate things first
-    $usernameValidation = $this->validateUsername($user['username']);
-    $emailValidation = $this->validateEmail($user['email']);
-    $uid = $this->api->getUserId();
+	/**
+	 * Validates the given password.
+	 *
+	 * At the moment, ownCloud does _NOT_ enforce secure
+	 * passwords. Anything but an empty password is valid.
+	 * Despite ownCloud's default behavior, you bet that
+	 * we WILL enforce secure passwords. At least to some
+	 * degree.
+	 *
+	 * The following will be considered a valid password:
+	 * - At least 6 characters in length
+	 * - Contain at least one upper and one lower case letter
+	 * - Contain at least one special character or number
+	 *
+	 * @param password The password to validate
+	 * @return True if the password is valid, otherwise false
+	 */
+	public function validatePassword($password) {
+		return isset($password) && preg_match("/(?=^.{6,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/", $password);
+	}
 
-    // Response model for invalid data
-    $invalidDataResponse = array(
-      'validUser' => $usernameValidation['validUsername'],
-      'validEmail' => $emailValidation['validEmail'],
-      'validGroups' => $this->validateGroups($user['groups'], $this->api->isAdminUser($uid))
-      );
+	/**
+	 * Chreates the user, adds him to his groups and send him an invite mail.
+	 *
+	 * This function does double check it's input to make sure that
+	 * everything is in order before actually creating anything.
+	 *
+	 * @param user The user array containing the keys 'username', 'email', and groups.
+	 *             Groups may be empty if the current user is an administrator
+	 * @return The appropriate JSONResponse reporting success or error
+	 */
+	public function invite($user=array()) {
+		// Don't trust the user's input blindly... Validate things first
+		$usernameValidation = $this->validateUsername($user['username']);
+		$emailValidation = $this->validateEmail($user['email']);
+		$uid = $this->api->getUserId();
 
-    if(!$usernameValidation['validUsername'] || !$emailValidation['validEmail'] || !$invalidDataResponse['validGroups']) {
-      return new JSONResponse($invalidDataResponse, 400);
-    }
+		// Response model for invalid data
+		$invalidDataResponse = array(
+			'validUser' => $usernameValidation['validUsername'],
+			'validEmail' => $emailValidation['validEmail'],
+			'validGroups' => $this->validateGroups($user['groups'], $this->api->isAdminUser($uid))
+			);
 
-    // Set a secure inital password (will not be send to the user)
-    $user['password'] = $this->mkToken();
+		if(!$usernameValidation['validUsername'] || !$emailValidation['validEmail'] || !$invalidDataResponse['validGroups']) {
+			return new JSONResponse($invalidDataResponse, 400);
+		}
 
-    // Create the user and add him to groups
-    if (!\OC_User::createUser($user['username'], $user['password'])) {
-      return new JSONResponse(array( 'msg' => 'User creation failed for '. $username . '. Please contact your system administrator!'), 500);
-    }
+		// Set a secure inital password (will not be send to the user)
+		$user['password'] = $this->mkToken();
 
-    if(isset($user['groups']) && is_array($user['groups'])) {
-      foreach ($user['groups'] as $group) {
-        \OC_Group::addToGroup( $user['username'], $group );
-      }
-    }
+		// Create the user and add him to groups
+		if (!\OC_User::createUser($user['username'], $user['password'])) {
+			return new JSONResponse(array( 'msg' => 'User creation failed for '. $username . '. Please contact your system administrator!'), 500);
+		}
 
-    // Set email and password token
-    $token = $this->mkToken();
-    \OC_Preferences::setValue($user['username'], 'settings', 'email', $user['email']);
-    \OC_Preferences::setValue($user['username'], 'invite', 'token', hash('sha256', $token)); // Hash again for timing attack protection
+		if(isset($user['groups']) && is_array($user['groups'])) {
+			foreach ($user['groups'] as $group) {
+				\OC_Group::addToGroup( $user['username'], $group );
+			}
+		}
 
-    // Send email
-    $link = \OC_Helper::linkToRoute('invite_join', array('user' => $user['username'], 'token' => $token));
-    $link = \OC_Helper::makeURLAbsolute($link);
-    $tmpl = new \OCP\Template('invite', 'email');
-    $tmpl->assign('link', $link);
-    $tmpl->assign('inviter', $uid);
-    $tmpl->assign('invitee', $user['username']);
-    $tmpl->assign('productname', $this->defaults->getName());
-    $msg = $tmpl->fetchPage();
-    $from = \OC_Preferences::getValue($this->api->getUserId(), 'settings', 'email');
+		// Set email and password token
+		$token = $this->mkToken();
+		\OC_Preferences::setValue($user['username'], 'settings', 'email', $user['email']);
+		\OC_Preferences::setValue($user['username'], 'invite', 'token', hash('sha256', $token)); // Hash again for timing attack protection
 
-    if(!isset($from)) {
-      $from = \OCP\Util::getDefaultEmailAddress('invite-noreply');
-    }
+		// Send email
+		$link = \OC_Helper::linkToRoute('invite_join', array('user' => $user['username'], 'token' => $token));
+		$link = \OC_Helper::makeURLAbsolute($link);
+		$tmpl = new \OCP\Template('invite', 'email');
+		$tmpl->assign('link', $link);
+		$tmpl->assign('inviter', $uid);
+		$tmpl->assign('invitee', $user['username']);
+		$tmpl->assign('productname', $this->defaults->getName());
+		$msg = $tmpl->fetchPage();
+		$from = \OC_Preferences::getValue($this->api->getUserId(), 'settings', 'email');
 
-    try {
-      \OC_Mail::send($user['email'], $user['username'], $this->l->t('You are invited to join %s', array($this->defaults->getName())), $msg, $from, $uid);
-    } catch (Exception $e) {
-      return new JSONResponse(array('msg' => 'Error sending email! Please contact your system administrator!', 'error' => $e), 500);
-    }
+		if(!isset($from)) {
+			$from = \OCP\Util::getDefaultEmailAddress('invite-noreply');
+		}
 
-    return new JSONResponse(array('msg' => 'OK'), 200);
-  }
+		try {
+			\OC_Mail::send($user['email'], $user['username'], $this->l->t('You are invited to join %s', array($this->defaults->getName())), $msg, $from, $uid);
+		} catch (Exception $e) {
+			return new JSONResponse(array('msg' => 'Error sending email! Please contact your system administrator!', 'error' => $e), 500);
+		}
+
+		return new JSONResponse(array('msg' => 'OK'), 200);
+	}
 
 }
