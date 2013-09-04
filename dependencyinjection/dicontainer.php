@@ -38,11 +38,15 @@ class DIContainer extends BaseContainer {
 		});
 
 		$this['PageController'] = $this->share(function($c){
-			return new PageController($c['API'], $c['Request'], $c['InviteService']);
+			return new PageController(
+				$c['API'], $c['Request'], $c['InviteService']
+			);
 		});
 
 		$this['UserController'] = $this->share(function($c){
-			return new UserController($c['API'], $c['Request'], $c['InviteService']);
+			return new UserController(
+				$c['API'], $c['Request'], $c['InviteService']
+			);
 		});
 	}
 

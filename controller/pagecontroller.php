@@ -85,7 +85,8 @@ class PageController extends Controller {
 	public function signup() {
 		$username = $this->params('user');
 		$token = $this->params('token');
-		$validTokenAndUser = $this->inviteService->validateToken($username, $token);
+		$validTokenAndUser = $this->inviteService
+			->validateToken($username, $token);
 
 		$model = array(
 			'validTokenAndUser' => $validTokenAndUser,
@@ -113,7 +114,8 @@ class PageController extends Controller {
 		$token = $this->params('token');
 		$passwordRepeat = $this->params('password-repeat');
 		$validPassword = $this->inviteService->validatePassword($password);
-		$validTokenAndUser = $this->inviteService->validateToken($username, $token);
+		$validTokenAndUser = $this->inviteService
+			->validateToken($username, $token);
 		$passwordMissmatch = $passwordRepeat !== $password;
 
 		$model = array(

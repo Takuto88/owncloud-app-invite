@@ -46,7 +46,8 @@ class UserController extends Controller {
 	 */
 	public function test() {
 		$user = $this->params('user');
-		$usernameValidation = $this->inviteService->validateUsername($user['username']);
+		$usernameValidation = $this->inviteService
+			->validateUsername($user['username']);
 		$emailValidation = $this->inviteService->validateEmail($user['email']);
 
 		$response = array(

@@ -30,14 +30,15 @@ if(\OCP\App::isEnabled('appframework')){
 	$api = new \OCA\AppFramework\Core\API('invite');
 	$userId = $api->getUserId();
 
-	if($api->isLoggedIn() && ($api->isAdminUser($userId) || $api->isSubAdminUser($userId))) {
+	if($api->isLoggedIn() && ($api->isAdminUser($userId)
+		|| $api->isSubAdminUser($userId))) {
 		$api->addNavigationEntry(array(
 
 			// the string under which your app will be referenced in owncloud
 			'id' => $api->getAppName(),
 
-			// sorting weight for the navigation. The higher the number, the higher
-			// will it be listed in the navigation
+			// sorting weight for the navigation. The higher the number,
+			// the higher will it be listed in the navigation
 			'order' => 10,
 
 			// the route that will be shown on startup
@@ -53,6 +54,7 @@ if(\OCP\App::isEnabled('appframework')){
 		));
 	}
 } else {
-	$msg = 'Can not enable the Invitations app because the App Framework App is disabled';
+	$msg = 	'Can not enable the Invitations app because the App Framework ' .
+			'App is disabled';
 	\OCP\Util::writeLog('invite', $msg, \OCP\Util::ERROR);
 }

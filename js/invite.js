@@ -160,7 +160,10 @@ var OC_Invite = {
 		  if(error && error.msg) {
 			alert(error.msg);
 		  } else {
-			alert(t('invite', 'Something went very wrong. Please contact your administrator!'));
+			alert(t(
+				'invite',
+				'Something went very wrong. Please contact your administrator!'
+			));
 		  }
 		  $('button#send-invite').text(error.msg);
 		}
