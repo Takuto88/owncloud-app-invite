@@ -23,6 +23,7 @@ namespace OCA\Invite\Service;
 
 use \OC_Defaults;
 use \OCA\AppFramework\Http\JSONResponse;
+use \OCP\Config;
 
 /**
  * This class is the businesslayer of the ownCloud Invitations App.
@@ -33,6 +34,7 @@ use \OCA\AppFramework\Http\JSONResponse;
  */
 class InviteService {
 	private $defaults;
+	private $config;
 	private $api;
 	private $l;
 
@@ -40,6 +42,7 @@ class InviteService {
 		$this->defaults = new OC_Defaults();
 		$this->api = $api;
 		$this->l = $api->getTrans();
+		$this->config = new Config();
 	}
 
 	/**
@@ -49,7 +52,7 @@ class InviteService {
 	 */
 	private function mkToken() {
 		$randomBytes = $this->generateRandomBytes(30);
-		$salt = \OC_Config::getValue('passwordsalt', '');
+		$salt = $this->config->getSystemValue('passwordsalt', '');
 		return hash('sha256', $randomBytes . $salt);
 	}
 
