@@ -19,7 +19,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-namespace OCA\Invite\Lib;
+namespace OCA\Invite\Service;
 
 use \OC_Defaults;
 use \OCA\AppFramework\Http\JSONResponse;

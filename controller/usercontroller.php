@@ -22,11 +22,15 @@
 
 namespace OCA\Invite\Controller;
 
+use \OCA\Invite\Service\InviteService;
 use \OCA\AppFramework\Controller\Controller;
 use \OCA\AppFramework\Http\JSONResponse;
 
 class UserController extends Controller {
 
+	/**
+	 * @var InviteService
+	 */
 	private $inviteService;
 
  	/**

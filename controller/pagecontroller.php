@@ -22,21 +22,32 @@
 
 namespace OCA\Invite\Controller;
 
+use \OCP\GroupInterface;
+use \OCA\Invite\Service\InviteService;
 use \OCA\AppFramework\Controller\Controller;
 use \OCA\AppFramework\Http\JSONResponse;
 use \OCA\AppFramework\Http;
 
 class PageController extends Controller {
 
+	/**
+	 * @var InviteService
+	 */
 	private $inviteService;
+
+	/**
+	 * @var GroupInterface
+	 */
+	private $groupBackend;
 
 	/**
 	 * @param Request $request an instance of the request
 	 * @param API $api an api wrapper instance
 	 */
-	public function __construct($api, $request, $inviteService) {
+	public function __construct($api, $request, $inviteService, $groupBackend) {
 		parent::__construct($api, $request);
 		$this->inviteService = $inviteService;
+		$this->groupBackend = $groupBackend;
 	}
 
 	/**
@@ -56,9 +67,9 @@ class PageController extends Controller {
 
 		// Query groups based on user's permissions
 		if($isAdmin) {
-			$tmpGroups = \OC_Group::getGroups();
+			$tmpGroups = $this->groupBackend->getGroups();
 		} else {
-			$tmpGroups = \OC_SubAdmin::getSubAdminsGroups($uid);
+			$tmpGroups = $this->groupBackend->getSubAdminGroups($uid);
 		}
 
 		// Filter out just the gid (=group name)
