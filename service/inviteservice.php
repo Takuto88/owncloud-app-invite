@@ -48,7 +48,7 @@ class InviteService {
 	 * @return A random token as done the password reset feature of ownCloud
 	 */
 	private function mkToken() {
-		$randomBytes = \OC_Util::generate_random_bytes(30);
+		$randomBytes = $this->generateRandomBytes(30);
 		$salt = \OC_Config::getValue('passwordsalt', '');
 		return hash('sha256', $randomBytes . $salt);
 	}
@@ -282,6 +282,48 @@ class InviteService {
 		}
 
 		return new JSONResponse(array('msg' => 'OK'), 200);
+	}
+
+	/**
+	 * Copied over from ownCloud lib/util.php as from OC 6 on forward,
+	 * this wil no longer be accessible.
+	 *
+	 * @brief Generates a cryptographical secure pseudorandom string
+	 * @param Int with the length of the random string
+	 * @return String
+	 * Please also update secureRNG_available if you change something here
+	 */
+	private function generateRandomBytes($length = 30) {
+
+		// Try to use openssl_random_pseudo_bytes
+		if(function_exists('openssl_random_pseudo_bytes')) {
+			$pseudo_byte = bin2hex(
+				openssl_random_pseudo_bytes($length, $strong)
+			);
+			if($strong == true) {
+				 // Truncate it to match the length
+				return substr($pseudo_byte, 0, $length);
+			}
+		}
+
+		// Try to use /dev/urandom
+		$fp = @file_get_contents('/dev/urandom', false, null, 0, $length);
+		if ($fp !== false) {
+			$string = substr(bin2hex($fp), 0, $length);
+			return $string;
+		}
+
+		// Fallback to mt_rand()
+		$characters = '0123456789';
+		$characters .= 'abcdefghijklmnopqrstuvwxyz';
+		$charactersLength = strlen($characters)-1;
+		$pseudo_byte = "";
+
+		// Select some random characters
+		for ($i = 0; $i < $length; $i++) {
+			$pseudo_byte .= $characters[mt_rand(0, $charactersLength)];
+		}
+		return $pseudo_byte;
 	}
 
 }
