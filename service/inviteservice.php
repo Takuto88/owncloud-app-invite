@@ -98,7 +98,7 @@ class InviteService {
 				->t('Username must be at least 3 characters long');
 		}
 
-		if(\OC_User::userExistsForCreation($username)) {
+		if(\OC_User::userExists($username)) {
 			$result['validUsername'] = false;
 			$result['msg'] = $this->l->t('User exists already');
 		}
@@ -249,7 +249,7 @@ class InviteService {
 		$link = \OC_Helper::makeURLAbsolute($link);
 		$tmpl = new \OCP\Template('invite', 'email');
 		$tmpl->assign('link', $link);
-		$tmpl->assign('inviter', $uid);
+		$tmpl->assign('inviter', \OC_User::getDisplayName($uid));
 		$tmpl->assign('invitee', $user['username']);
 		$tmpl->assign('productname', $this->defaults->getName());
 		$msg = $tmpl->fetchPage();
@@ -271,7 +271,7 @@ class InviteService {
 						array($this->defaults->getName())),
 				$msg,
 				$from,
-				$uid
+				\OC_User::getDisplayName($uid)
 			);
 		} catch (Exception $e) {
 			return new JSONResponse(
