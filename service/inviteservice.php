@@ -177,7 +177,7 @@ class InviteService {
 	}
 
 	/**
-	 * Chreates the user, adds him to his groups and send him an invite mail.
+	 * Creates the user, adds him to his groups and send him an invite mail.
 	 *
 	 * This function does double check it's input to make sure that
 	 * everything is in order before actually creating anything.

@@ -17,6 +17,7 @@ div.invite-group-header {
 
 label.join-label {
 	margin-left: 10px;
+  color: white;
 }
 
 #login form .success {
