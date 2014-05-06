@@ -27,21 +27,21 @@ use \OCA\AppFramework\App;
 use \OCA\Invite\DependencyInjection\DIContainer;
 
 $this->create('invite_index', '/')->get()->action(
-    function($params){
-        App::main('PageController', 'index', $params, new DIContainer());
-    }
+	function($params){
+		App::main('PageController', 'index', $params, new DIContainer());
+	}
 );
 
 $this->create('invite_join', '/users/join')->get()->action(
-    function($params){
-        App::main('PageController', 'signup', $params, new DIContainer());
-    }
+	function($params){
+		App::main('PageController', 'signup', $params, new DIContainer());
+	}
 );
 
 $this->create('invite_join_submit', '/users/join')->post()->action(
-    function($params){
-        App::main('PageController', 'submit', $params, new DIContainer());
-    }
+	function($params){
+		App::main('PageController', 'submit', $params, new DIContainer());
+	}
 );
 
 /**
@@ -49,13 +49,13 @@ $this->create('invite_join_submit', '/users/join')->post()->action(
  */
 
 $this->create('invite_test', '/users/test')->post()->action(
-    function($params){
-        App::main('UserController', 'test', $params, new DIContainer());
-    }
+	function($params){
+		App::main('UserController', 'test', $params, new DIContainer());
+	}
 );
 
 $this->create('invite_create', '/users')->post()->action(
-    function($params){
-        App::main('UserController', 'create', $params, new DIContainer());
-    }
+	function($params){
+		App::main('UserController', 'create', $params, new DIContainer());
+	}
 );

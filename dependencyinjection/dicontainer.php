@@ -23,27 +23,38 @@
 namespace OCA\Invite\DependencyInjection;
 
 use \OCA\AppFramework\DependencyInjection\DIContainer as BaseContainer;
-
 use \OCA\Invite\Controller\PageController;
 use \OCA\Invite\Controller\UserController;
-use \OCA\Invite\Lib\InviteService;
+use \OCA\Invite\Service\InviteService;
+use \OCA\Invite\Service\SubAdminGroupBackend;
 
 class DIContainer extends BaseContainer {
 
-    public function __construct(){
-        parent::__construct('invite');
+	public function __construct(){
+		parent::__construct('invite');
 
-        $this['InviteService'] = $this->share(function($c){
-          return new InviteService($c['API']);
-        });
+		$this['GroupBackend'] = $this->share(function($c){
+			return new SubAdminGroupBackend();
+		});
 
-        $this['PageController'] = $this->share(function($c){
-            return new PageController($c['API'], $c['Request'], $c['InviteService']);
-        });
+		$this['InviteService'] = $this->share(function($c){
+		  return new InviteService($c['API']);
+		});
 
-        $this['UserController'] = $this->share(function($c){
-            return new UserController($c['API'], $c['Request'], $c['InviteService']);
-        });
-    }
+		$this['PageController'] = $this->share(function($c){
+			return new PageController(
+				$c['API'],
+				$c['Request'],
+				$c['InviteService'],
+				$c['GroupBackend']
+			);
+		});
+
+		$this['UserController'] = $this->share(function($c){
+			return new UserController(
+				$c['API'], $c['Request'], $c['InviteService']
+			);
+		});
+	}
 
 }

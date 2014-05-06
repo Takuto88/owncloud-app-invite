@@ -22,49 +22,54 @@
 
 namespace OCA\Invite\Controller;
 
+use \OCA\Invite\Service\InviteService;
 use \OCA\AppFramework\Controller\Controller;
 use \OCA\AppFramework\Http\JSONResponse;
 
 class UserController extends Controller {
 
-  private $inviteService;
+	/**
+	 * @var InviteService
+	 */
+	private $inviteService;
 
- /**
-  * @param Request $request an instance of the request
-  * @param API $api an api wrapper instance
-  */
-  public function __construct($api, $request, $inviteService) {
-    parent::__construct($api, $request);
-    $this->inviteService = $inviteService;
-  }
+ 	/**
+	 * @param Request $request an instance of the request
+	 * @param API $api an api wrapper instance
+	 */
+	public function __construct($api, $request, $inviteService) {
+		parent::__construct($api, $request);
+		$this->inviteService = $inviteService;
+	}
 
-  /**
-   * Tests a new user if it is valid
-   *
-   * @Ajax
-   * @IsAdminExemption
-   */
-  public function test() {
-    $user = $this->params('user');
-    $usernameValidation = $this->inviteService->validateUsername($user['username']);
-    $emailValidation = $this->inviteService->validateEmail($user['email']);
+	/**
+	 * Tests a new user if it is valid
+	 *
+	 * @Ajax
+	 * @IsAdminExemption
+	 */
+	public function test() {
+		$user = $this->params('user');
+		$usernameValidation = $this->inviteService
+			->validateUsername($user['username']);
+		$emailValidation = $this->inviteService->validateEmail($user['email']);
 
-    $response = array(
-      'usernameValidation' => $usernameValidation,
-      'emailValidation' => $emailValidation
-      );
+		$response = array(
+			'usernameValidation' => $usernameValidation,
+			'emailValidation' => $emailValidation
+			);
 
-    return new JSONResponse($response, 200);
-  }
+		return new JSONResponse($response, 200);
+	}
 
-  /**
-   * Creates a new user
-   *
-   * @Ajax
-   * @IsAdminExemption
-   */
-  public function create(){
-    $user = $this->params('user');
-    return $this->inviteService->invite($user);
-  }
+	/**
+	 * Creates a new user
+	 *
+	 * @Ajax
+	 * @IsAdminExemption
+	 */
+	public function create(){
+		$user = $this->params('user');
+		return $this->inviteService->invite($user);
+	}
 }
