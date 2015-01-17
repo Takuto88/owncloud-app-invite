@@ -45,7 +45,7 @@ if(\OCP\App::isEnabled('appframework')){
 			'href' => $api->linkToRoute('invite_index'),
 
 			// the icon that will be shown in the navigation
-			'icon' => $api->imagePath('navicon.svg'),
+			'icon' => $api->imagePath('navicon.png'),
 
 			// the title of your application. This will be used in the
 			// navigation or on the settings page of your app
